@@ -1,0 +1,13 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+<BaseLayout title="Page not found — N-Ops" description="This page does not exist." path="/404">
+<section class="sec" aria-labelledby="nf-h">
+  <div class="wrap">
+    <p class="eyebrow"><span class="bar"></span>404 &middot; Page not found</p>
+    <h1 id="nf-h" class="mt-5 text-[clamp(3rem,8vw,7rem)] leading-[.95] tracking-[-.055em]">Off the <span class="grad-t">map.</span></h1>
+    <p class="mt-6 max-w-[48ch] text-ink-2 text-[clamp(16px,1.3vw,18px)]">We couldn&rsquo;t find that page. It may have moved, or the link may be wrong.</p>
+    <div class="mt-8 flex flex-wrap gap-2.5"><a class="btn btn-mint" href="/">Back to home</a><a class="btn btn-line" href="/faq">Read the FAQ</a><a class="btn btn-line" href="/pricing">See pricing</a></div>
+  </div>
+</section>
+</BaseLayout>

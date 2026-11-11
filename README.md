@@ -1,11 +1,26 @@
-# N-Ops-WebSite
+# N-Ops — Website
 
-N-Ops main website.
+Marketing site for N-Ops, the open-source infrastructure control plane. Built with [Astro](https://astro.build).
 
-## Project structure
+## Structure
 
-- `index.html` contains the page markup and metadata.
-- `css/styles.css` contains the page styles.
-- `js/main.js` contains the page interactions.
+```
+src/
+├── pages/index.astro       page content (hero through CTA)
+├── layouts/BaseLayout.astro  head, nav, footer, closing script
+├── components/             Seo, Header, Footer, IconSprite
+├── styles/global.css       site stylesheet
+└── scripts/site.js         nav, canvas fields, architecture scroll, FAQ
+public/                     favicon, robots.txt
+```
 
-Open `index.html` in a browser to preview the site.
+## Commands
+
+| Command           | Action                                  |
+| :----------------- | :--------------------------------------- |
+| `npm install`       | Install dependencies                     |
+| `npm run dev`        | Start dev server at `localhost:4321`     |
+| `npm run build`       | Build production site to `./dist/`       |
+| `npm run preview`      | Preview the production build locally     |
+
+`astro.config.mjs` sets `site` to `https://nops.app` for canonical URLs and the sitemap — update it if that domain changes.

@@ -1,0 +1,137 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme {
+  --color-bg:#FFFFFF;--color-bg-2:#F4F6F8;--color-line:#E4E8EC;--color-line-2:#CDD3DA;
+  --color-ink:#0B1118;--color-ink-2:#38414C;--color-mute:#66707C;--color-ink-f:#0B1118;--color-surface:#FFFFFF;
+  --color-chip-bg:#0B1118;--color-chip-ink:#FFFFFF;
+  --color-mint:#4CF2C0;--color-violet:#8A7CFF;
+  --color-mint-ink:#0A9A74;--color-violet-ink:#6A59F2;
+  --color-t-bg:#0B1118;--color-t-panel:#101822;--color-t-panel-2:#151E2A;--color-t-line:rgba(232,238,244,.1);--color-t-ink:#E8EEF4;--color-t-mute:#8D99A8;
+  --color-red:#FF6B6B;--color-amber:#F5B94A;
+  --font-sans:"Space Grotesk",ui-sans-serif,system-ui,sans-serif;--font-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --breakpoint-bp1:1180px;--breakpoint-bp2:960px;--breakpoint-bp3:760px;--breakpoint-bp4:420px;
+  --ease-std:cubic-bezier(.22,1,.36,1);--ease-std2:cubic-bezier(.65,0,.35,1);
+}
+:root{
+  --guide:rgba(11,17,24,.045);
+  --e:cubic-bezier(.22,1,.36,1);--e2:cubic-bezier(.65,0,.35,1);
+  --pad:clamp(20px,3.4vw,48px);--gut:clamp(12px,1.6vw,24px);
+  --nav:76px;
+  --grad:linear-gradient(90deg,var(--color-mint),var(--color-violet));
+  --grad-ink:linear-gradient(90deg,var(--color-mint-ink),var(--color-violet-ink));
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --color-bg:var(--color-t-bg);--color-bg-2:var(--color-t-panel);--color-line:var(--color-t-line);--color-line-2:rgba(232,238,244,.18);--guide:rgba(232,238,244,.05);
+  --color-ink:var(--color-t-ink);--color-ink-2:#C3CCD6;--color-mute:var(--color-t-mute);--color-surface:var(--color-t-panel-2);
+  --color-chip-bg:var(--color-t-ink);--color-chip-ink:#0B1118;
+}
+@layer base{
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{@apply m-0 bg-bg text-ink antialiased;font:400 17px/1.55 var(--font-sans);overflow-x:clip}
+  a{@apply text-inherit no-underline}
+  button{@apply border-0 bg-transparent cursor-pointer p-0 text-left;font:inherit;color:inherit}
+  ::selection{@apply bg-mint text-ink}
+  :focus-visible{@apply outline-2 outline-violet-ink outline-offset-[3px] rounded}
+  h1,h2,h3,h4{@apply m-0 font-bold tracking-[-.04em] leading-[.95]}
+  p{@apply m-0}
+  ul,ol{@apply m-0 p-0 list-none}
+}
+
+@layer components{
+  .skip{@apply absolute left-3 -top-[60px] z-[300] bg-chip-bg text-chip-ink px-4 py-2.5 rounded-lg focus:top-3}
+
+  .wrap{@apply relative mx-auto max-w-[1440px] px-[var(--pad)]}
+  .rgrid{@apply grid grid-cols-12;column-gap:var(--gut)}
+
+  /* visible 12-col guides */
+  .guides{@apply fixed inset-0 pointer-events-none z-0}
+  .guides .wrap,.guides .rgrid{@apply h-full}
+  .guides i{@apply h-full border-x;border-color:var(--guide)}
+
+  /* the hyphen bar */
+  .bar{@apply inline-block w-[.62em] h-[.2em] bg-mint align-[.22em] flex-none}
+  .grad-t{background:var(--grad-ink);-webkit-background-clip:text;background-clip:text;@apply text-violet-ink;-webkit-text-fill-color:transparent}
+  .on-dark .grad-t{background:var(--grad);-webkit-background-clip:text;background-clip:text}
+
+  .eyebrow{@apply flex items-center gap-3 font-mono text-xs font-medium tracking-[.12em] uppercase text-mute}
+  .eyebrow .bar{@apply text-xl align-baseline}
+
+  /* buttons */
+  .btn{@apply inline-flex items-center gap-3 h-[54px] px-[22px] rounded-2xl font-semibold text-base tracking-[-.01em] whitespace-nowrap hover:-translate-y-0.5;transition:transform .25s var(--e),background .25s,color .25s,box-shadow .25s,border-color .25s}
+  .btn svg{@apply w-[18px] h-[18px] flex-none}
+  .btn-dark{@apply bg-chip-bg text-chip-ink hover:shadow-[0_14px_30px_-14px_rgba(11,17,24,.6)]}
+  .btn-line{@apply border-[1.5px] border-ink bg-transparent hover:bg-chip-bg hover:text-chip-ink}
+  .btn-mint{@apply bg-mint text-ink-f hover:shadow-[0_14px_30px_-14px_rgba(11,17,24,.45)]}
+  .btn-ghost-d{@apply border-[1.5px] border-[rgba(232,238,244,.25)] text-t-ink hover:border-t-ink}
+  .btn.sm{@apply h-[42px] px-4 rounded-[11px] text-[14.5px] gap-[9px]}
+
+  /* section scaffolding, reused by every content section below */
+  .sec{padding:clamp(80px,11vw,168px) 0}
+  .sec.alt{@apply bg-bg-2}
+  .sh{@apply items-start;margin-bottom:clamp(44px,6vw,88px)}
+  .sh-num{@apply col-span-2 max-bp2:col-span-12 max-bp2:mb-[46px] font-light text-line-2 relative;font-size:clamp(3.4rem,7.4vw,7.4rem);line-height:.8;letter-spacing:-.06em}
+  .sh-num::after{content:"";position:absolute;left:.06em;top:calc(100% + 18px);width:.42em;height:7px;background:var(--color-mint);transform-origin:0 50%;transition:transform .9s var(--e) .25s}
+  .anim .sh:not(.in) .sh-num::after{transform:scaleX(0)}
+  .sh-main{@apply col-span-10 max-bp2:col-span-12}
+  .sh-main .eyebrow{@apply mb-5}
+  .sh-main .sub{@apply mt-6 text-ink-2;font-size:clamp(17px,1.3vw,19px);max-width:620px}
+}
+
+@layer base{
+  h2{@apply max-w-[15ch];font-size:clamp(2.5rem,6vw,5.6rem);line-height:.92;letter-spacing:-.05em}
+}
+
+/* hero heading reveal: staggered per-line keyframes, kept as CSS (not utility-expressible) */
+h1 .ln{display:block;overflow:hidden;padding-bottom:.1em;margin-bottom:-.1em}
+h1 .ln>span{display:inline-block;animation:lnUp 1.15s var(--e) both}
+h1 .ln:nth-child(2)>span{animation-delay:.08s}
+h1 .ln:nth-child(3)>span{animation-delay:.16s}
+h1 .ln:nth-child(4)>span{animation-delay:.24s}
+@keyframes lnUp{from{transform:translateY(108%)}}
+h1 .end .bar{width:.48em;height:.14em;vertical-align:.08em;margin-left:.08em;animation:barIn .8s var(--e) 1.1s both;transform-origin:0 50%}
+@keyframes barIn{from{transform:scaleX(0)}}
+
+/* decorative SVG icons: fill/stroke theming kept as CSS, reused across sections */
+.pin .base{fill:none;stroke:var(--color-line-2);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.pin circle{fill:var(--color-surface);stroke:var(--color-line-2);stroke-width:2.5}
+.pin circle.on{fill:var(--color-ink);stroke:var(--color-ink)}
+.pin .mid{fill:var(--color-violet-ink);stroke:none}
+
+/* ───────── 02 capabilities: glyph SVG internals kept as CSS, same reasoning as .pin ───────── */
+.glyph .base{fill:none;stroke:var(--color-line-2);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.glyph .hi{fill:none;stroke:url(#capG);stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:var(--l) 200;stroke-dashoffset:0;transition:stroke-dashoffset 1.1s var(--e) .2s}
+.anim .cap:not(.in) .glyph .hi{stroke-dashoffset:var(--l)}
+.glyph circle{fill:var(--color-surface);stroke:var(--color-line-2);stroke-width:2.5;transition:stroke .4s,fill .4s}
+.glyph circle.on{stroke:var(--color-ink)}
+.cap:hover .glyph circle.on{fill:var(--color-ink)}
+
+/* ───────── 03 architecture: the "packets" (.pk) are plain SVG circles created by site.js at
+   runtime, never written to markup, so Tailwind never sees that class to generate CSS for it.
+   Same for the ping keyframes: Tailwind utilities can reference a keyframe name, not define one. */
+.pk{fill:var(--color-violet-ink)}
+@keyframes ping{0%{opacity:.9;transform:scale(.9)}100%{opacity:0;transform:scale(1.35)}}
+
+
+
+
+/* ───────── responsive ───────── */
+@media (max-width:760px){
+  .rgrid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .guides i:nth-child(n+5){display:none}
+  .rgrid>*{grid-column:1/-1!important}
+  .btn{height:50px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+
+/* dark theme: white outline on the architecture mock windows */
+:root[data-theme="dark"] .arch-card{border-color:#fff}
+:root[data-theme="dark"] .tile{border:1px solid rgba(232,238,244,.35)}
+/* a backdrop-filter on the header would make it the backdrop root, so the mega menu's blur would only see the header itself; drop it while the menu is open */
+header.top:has(.nav-dd:hover,.nav-dd:focus-within){-webkit-backdrop-filter:none;backdrop-filter:none}

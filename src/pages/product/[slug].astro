@@ -1,0 +1,77 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { areas } from "../../data/product.js";
+
+export function getStaticPaths() {
+  return areas.map((a, i) => ({
+    params: { slug: a.slug },
+    props: { a, prev: areas[(i + areas.length - 1) % areas.length], next: areas[(i + 1) % areas.length] },
+  }));
+}
+const { a, prev, next } = Astro.props;
+const [mTitle, mMeta, mRows] = a.mock;
+const GH = "https://github.com/Neko-Nik-Org/N-Ops-Main-API";
+---
+<BaseLayout title={`${a.title} — N-Ops`} description={a.lead} path={`/product/${a.slug}`}>
+<section class="relative pt-[clamp(32px,5vw,72px)] pb-[clamp(40px,6vw,88px)]" aria-labelledby="pr-h">
+  <div class="wrap">
+    <a href="/#chapters" class="font-mono text-[11.5px] tracking-[.08em] text-mute hover:text-ink">&larr; All features</a>
+    <div class="mt-8 grid grid-cols-12 gap-x-[var(--gut)] gap-y-10 items-center">
+      <div class="col-span-6 max-bp2:col-span-12">
+        <p class="eyebrow"><span class="bar"></span>{a.n} &middot; Product</p>
+        <h1 id="pr-h" class="mt-5 text-[clamp(2.6rem,5.4vw,4.8rem)] leading-[.98] tracking-[-.05em]">{a.title}</h1>
+        <p class="mt-6 max-w-[48ch] text-ink-2 text-[clamp(16px,1.3vw,18px)]">{a.lead}</p>
+        <div class="mt-8 flex flex-wrap gap-2.5"><a class="btn btn-mint" href={GH} rel="noopener">Get it on GitHub</a><a class="btn btn-line" href="/pricing">See pricing</a></div>
+      </div>
+      <div class="col-span-6 max-bp2:col-span-12">
+        <div class="rounded-[22px] border border-line-2 bg-bg-2 p-[clamp(10px,1.4vw,16px)]" role="img" aria-label={`${a.title}: example screen`}>
+          <div class="rounded-xl border border-line-2 bg-surface overflow-hidden font-mono text-[11px] leading-[1.4]" aria-hidden="true">
+            <div class="flex items-center gap-2 px-3.5 py-2.5 border-b border-line-2 text-mute"><span class="flex gap-1"><i class="w-1.5 h-1.5 rounded-full bg-line-2"></i><i class="w-1.5 h-1.5 rounded-full bg-line-2"></i><i class="w-1.5 h-1.5 rounded-full bg-line-2"></i></span><span>{mTitle}</span><span class="ml-auto">{mMeta}</span></div>
+            {mRows.map(([k, v]) => <div class="flex items-center justify-between gap-3 px-3.5 py-3 border-t border-line first:border-t-0"><span class="text-mute">{k}</span><span>{v}</span></div>)}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="wg-h">
+  <div class="wrap">
+    <p class="eyebrow"><span class="bar"></span>What you get</p>
+    <h2 id="wg-h" class="mt-5 text-[clamp(2rem,4vw,3.4rem)] leading-[1] tracking-[-.045em]">{a.title}, in detail.</h2>
+    <ul class="mt-10 grid grid-cols-2 max-bp2:grid-cols-1 gap-x-[var(--gut)] border-t border-line">
+      {a.points.map(p => <li class="flex gap-3 border-b border-line py-4 text-[16px]"><svg class="mt-[5px] shrink-0 text-mint-ink" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 5"/></svg>{p}</li>)}
+    </ul>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="hw-h">
+  <div class="wrap">
+    <p class="eyebrow"><span class="bar"></span>How it works</p>
+    <h2 id="hw-h" class="mt-5 text-[clamp(2rem,4vw,3.4rem)] leading-[1] tracking-[-.045em]">Built to be trusted.</h2>
+    <div class="mt-10 grid grid-cols-3 max-bp2:grid-cols-1 gap-[var(--gut)]">
+      {a.details.map(([t, d], i) => <div class="rounded-2xl border border-line-2 bg-surface p-6"><p class="font-mono text-[11px] tracking-[.14em] text-mint-ink">0{i + 1}</p><h3 class="mt-4 text-[19px] font-semibold tracking-[-.02em]">{t}</h3><p class="mt-2 text-[14.5px] text-mute leading-[1.55]">{d}</p></div>)}
+    </div>
+    <p class="mt-8 flex gap-2.5 items-baseline text-[15px] text-mute"><span class="bar"></span>N-Ops is in active development. This page describes the product direction, so check GitHub for what each release includes.</p>
+  </div>
+</section>
+
+{a.sections.map(([title, intro, items]) => (
+<section class="sec" aria-label={title}>
+  <div class="wrap">
+    <h2 class="text-[clamp(1.8rem,3.4vw,2.8rem)] leading-[1.02] tracking-[-.04em]">{title}</h2>
+    <p class="mt-3 max-w-[60ch] text-mute text-[16px]">{intro}</p>
+    <div class="mt-8 grid grid-cols-3 max-bp1:grid-cols-2 max-bp3:grid-cols-1 gap-[var(--gut)]">
+      {items.map(([k, v]) => <div class="rounded-2xl border border-line-2 bg-surface p-5"><h3 class="text-[16.5px] font-semibold tracking-[-.02em]">{k}</h3><p class="mt-2 text-[14.5px] text-mute leading-[1.55]">{v}</p></div>)}
+    </div>
+  </div>
+</section>
+))}
+
+<section class="sec" aria-label="More product areas">
+  <div class="wrap grid grid-cols-2 max-bp2:grid-cols-1 gap-[var(--gut)]">
+    <a href={`/product/${prev.slug}`} class="rounded-2xl border border-line-2 p-6 transition-colors hover:border-ink"><p class="font-mono text-[11px] tracking-[.14em] uppercase text-mute">&larr; Previous</p><p class="mt-3 text-[22px] font-semibold tracking-[-.03em]">{prev.title}</p></a>
+    <a href={`/product/${next.slug}`} class="rounded-2xl border border-line-2 p-6 text-right max-bp2:text-left transition-colors hover:border-ink"><p class="font-mono text-[11px] tracking-[.14em] uppercase text-mute">Next &rarr;</p><p class="mt-3 text-[22px] font-semibold tracking-[-.03em]">{next.title}</p></a>
+  </div>
+</section>
+</BaseLayout>
