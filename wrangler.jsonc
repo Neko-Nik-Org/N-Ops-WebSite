@@ -2,6 +2,9 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "n-ops-website",
   "compatibility_date": "2026-11-11",
+  "observability": {
+    "enabled": false
+  },
   // Static Astro build: `npm run build` writes ./dist, Workers serves it as assets.
   "assets": {
     "directory": "./dist",
