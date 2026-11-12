@@ -1,17 +1,37 @@
 ---
 // Posts {name, email, message, send_to} to the external forms API. Used by the contact page;
 // the waitlist form lives at /waitlist as its own stepper (see src/pages/waitlist.astro).
-const { kind, button } = Astro.props;
+// Field styles match the waitlist form so both forms look and behave the same.
+interface Props { kind: string; button: string; topics?: string[] }
+const { kind, button, topics = [] } = Astro.props;
 const key = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
-const f = "mt-1.5 w-full rounded-xl border border-line-2 bg-transparent px-4 py-3 text-[16px] focus:outline-2 focus:outline-mint";
-const l = "block font-mono text-[10.5px] tracking-[.14em] uppercase text-mute";
+const f = "mt-2 block w-full h-12 rounded-xl border border-line-2 bg-bg px-4 text-[16px] text-ink font-normal placeholder:text-mute/60 transition-[border-color,box-shadow] duration-200 hover:border-ink/40 focus:outline-none focus:border-ink focus:shadow-[0_0_0_4px_rgba(76,242,192,.22)]";
+const ta = f.replace("h-12", "h-auto py-3 resize-y min-h-[148px]");
+const l = "block text-[14px] font-medium text-ink";
+const o = "flex items-center gap-2.5 min-h-11 rounded-xl border border-line-2 bg-bg px-3.5 py-2 text-[14.5px] leading-snug cursor-pointer select-none transition-colors duration-200 hover:border-ink/40 has-[:checked]:border-mint-ink has-[:checked]:bg-mint/10 has-[:checked]:font-medium has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-violet-ink";
 ---
-<form class="mt-6 grid gap-4" data-api-form={kind} data-url={import.meta.env.PUBLIC_FORMS_URL} data-to={import.meta.env.PUBLIC_FORMS_SEND_TO}>
-  <label class={l}>Name<input class={f} name="name" required maxlength="100" autocomplete="name" /></label>
-  <label class={l}>Email<input class={f} name="email" type="email" required maxlength="150" autocomplete="email" /></label>
-  <label class={l}>Message<textarea class={f} name="message" rows="4" required maxlength="2000"></textarea></label>
+<form class="grid gap-6" data-api-form={kind} data-url={import.meta.env.PUBLIC_FORMS_URL} data-to={import.meta.env.PUBLIC_FORMS_SEND_TO}>
+  <div class="grid grid-cols-2 max-bp3:grid-cols-1 gap-x-4 gap-y-6">
+    <label class={l}>Name <span class="text-mint-ink" aria-hidden="true">*</span><input class={f} name="name" required maxlength="100" autocomplete="name" placeholder="Your name" /></label>
+    <label class={l}>Work email <span class="text-mint-ink" aria-hidden="true">*</span><input class={f} name="email" type="email" required maxlength="150" autocomplete="email" placeholder="you@company.com" /></label>
+  </div>
+  {topics.length > 0 && (
+    <fieldset>
+      <legend class={l}>What's it about? <span class="font-normal text-mute">(optional)</span></legend>
+      <div class="mt-2.5 grid grid-cols-2 max-bp4:grid-cols-1 gap-2.5">
+        {topics.map((t) => <label class={o}><input type="radio" name="topic" value={t} class="w-4 h-4 shrink-0 accent-mint-ink" />{t}</label>)}
+      </div>
+    </fieldset>
+  )}
+  <label class={l}>Message <span class="text-mint-ink" aria-hidden="true">*</span><textarea class={ta} name="message" rows="5" required maxlength="2000" placeholder="Tell us about your servers, team size and what you'd like N-Ops to do."></textarea></label>
   {key && <div class="cf-turnstile" data-sitekey={key}></div>}
-  <div class="flex flex-wrap items-center gap-4"><button class="btn btn-mint" type="submit">{button}</button><p class="text-[14px] text-mute" role="status" aria-live="polite" data-status></p></div>
+  <div class="pt-6 border-t border-line flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
+    <p class="text-[13.5px] text-mute max-w-[34ch]">Please never include real secrets or credentials.</p>
+    <button class="btn btn-dark group max-bp4:grow max-bp4:justify-center" type="submit">{button}
+      <svg class="transition-transform group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+    </button>
+  </div>
+  <p class="-mt-2 min-h-[1.5em] text-[14px] text-mute" role="status" aria-live="polite" data-status></p>
 </form>
 <script>
   // Match the widget to the site theme (the site has its own toggle, so don't rely on the OS setting).
@@ -31,18 +51,22 @@ const l = "block font-mono text-[10.5px] tracking-[.14em] uppercase text-mute";
   }
   document.querySelectorAll<HTMLFormElement>("form[data-api-form]").forEach((form) => {
     const status = form.querySelector<HTMLElement>("[data-status]")!;
-    const btn = form.querySelector<HTMLButtonElement>("button")!;
+    const btn = form.querySelector<HTMLButtonElement>("button[type=submit]")!;
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
+      if (!form.reportValidity()) return;
       const d = new FormData(form);
       const token = String(d.get("cf-turnstile-response") ?? "");
       if (!token) { status.textContent = "Please complete the captcha first."; return; }
+      // the API takes one message field, so an optional topic goes on its first line
+      const topic = String(d.get("topic") ?? "").trim();
+      const message = (topic ? `Topic: ${topic}\n\n` : "") + String(d.get("message") ?? "");
       btn.disabled = true; status.textContent = "Sending…";
       try {
         const res = await fetch(form.dataset.url!, {
           method: "POST",
           headers: { "content-type": "application/json", "x-cf-token": token },
-          body: JSON.stringify({ name: d.get("name"), email: d.get("email"), message: d.get("message"), send_to: form.dataset.to }),
+          body: JSON.stringify({ name: d.get("name"), email: d.get("email"), message, send_to: form.dataset.to }),
         });
         if (!res.ok) throw new Error(String(res.status));
         form.reset(); status.textContent = "Thanks, we'll be in touch.";

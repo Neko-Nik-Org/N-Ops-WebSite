@@ -2,10 +2,19 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 const key = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
-const f = "mt-1.5 w-full rounded-xl border border-line-2 bg-transparent px-4 py-3 text-[16px] focus:outline-2 focus:outline-mint";
-const l = "block font-mono text-[10.5px] tracking-[.14em] uppercase text-mute";
-const o = "flex items-start gap-2.5 rounded-xl border border-line-2 bg-transparent px-3.5 py-2.5 text-[14.5px] leading-snug cursor-pointer has-[:checked]:border-mint-ink has-[:checked]:bg-mint/10";
-const og = "mt-1.5 grid grid-cols-1 gap-2";
+// shared field styles: one height for every input, one look for every option
+const f = "mt-2 block w-full h-12 rounded-xl border border-line-2 bg-bg px-4 text-[16px] text-ink placeholder:text-mute/60 transition-[border-color,box-shadow] duration-200 hover:border-ink/40 focus:outline-none focus:border-ink focus:shadow-[0_0_0_4px_rgba(76,242,192,.22)]";
+const ta = f.replace("h-12", "h-auto py-3 resize-y min-h-[112px]");
+const l = "block text-[14px] font-medium text-ink";
+const q = "text-[15.5px] font-semibold tracking-[-.01em] text-ink";
+const hint = "font-normal text-mute";
+const o = "flex items-center gap-3 min-h-12 rounded-xl border border-line-2 bg-bg px-4 py-2.5 text-[15px] leading-snug cursor-pointer select-none transition-colors duration-200 hover:border-ink/40 has-[:checked]:border-mint-ink has-[:checked]:bg-mint/10 has-[:checked]:font-medium has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-violet-ink";
+const ri = "w-4 h-4 shrink-0 accent-mint-ink";
+const og = "mt-3 grid grid-cols-2 max-bp3:grid-cols-1 gap-2.5";
+const og4 = "mt-3 grid grid-cols-4 max-bp1:grid-cols-3 max-bp3:grid-cols-2 gap-2.5";
+const og3 = "mt-3 grid grid-cols-3 max-bp3:grid-cols-2 gap-2.5";
+const stepH = "max-w-none text-[clamp(1.45rem,2.2vw,1.9rem)] leading-[1.1] tracking-[-.035em]";
+const stepP = "mt-2 text-[15px] text-mute";
 
 const roleOpts = ["Developer", "DevOps or SRE", "Sysadmin", "Engineering lead or CTO", "Founder", "Student or hobbyist"];
 const serverOpts = ["1–5", "6–20", "21–100", "101–500", "500+"];
@@ -23,96 +32,140 @@ const spendOptsINR = ["Nothing", "Under ₹4,000", "₹4,000–15,000", "₹15,0
 const contactOpts = ["Yes", "No"];
 
 const steps = ["About you", "Your setup", "Tools & features", "Will you pay", "Wrap-up"];
+const stepIntro = [
+  "Who you are, so we know who we're building for.",
+  "Roughly how big your fleet and team are.",
+  "What you use today, and what matters most.",
+  "Honest answers here shape our pricing.",
+  "Last few questions, then you're on the list.",
+];
 ---
-<BaseLayout title="Join the waitlist — N-Ops" description="Get early access to N-Ops Managed Cloud. Takes under 2 minutes." path="/waitlist">
-<section class="pt-[clamp(32px,5vw,72px)] pb-[clamp(64px,9vw,140px)]" aria-labelledby="wl-h">
+<BaseLayout title="Join the N-Ops Managed Cloud Waitlist" description="Get early access to N-Ops Managed Cloud, the hosted open-source infrastructure control plane. Tell us about your setup in under 2 minutes." path="/waitlist">
+<section class="pt-[clamp(28px,4.5vw,64px)] pb-[clamp(64px,8vw,128px)]" aria-labelledby="wl-h">
   <div class="wrap">
-    <div class="max-w-[640px] mx-auto">
-      <p class="eyebrow"><span class="bar"></span>N-Ops Managed Cloud</p>
-      <h1 id="wl-h" class="mt-5 text-[clamp(2rem,4vw,3rem)] leading-[1] tracking-[-.045em]">Join the waitlist</h1>
-      <p class="mt-3 text-mute text-[15px]">Tell us about your setup — takes under 2 minutes.</p>
+    <div class="grid grid-cols-12 gap-x-[var(--gut)] gap-y-8 items-start">
 
-      <div class="mt-8 rounded-[22px] border border-line-2 bg-surface p-[clamp(22px,2.6vw,36px)]">
-        <div class="flex items-center justify-between font-mono text-[11px] tracking-[.1em] uppercase text-mute">
-          <span data-step-label>Step 1 of {steps.length} — {steps[0]}</span>
-          <span data-step-count>1/{steps.length}</span>
+      <aside class="col-span-4 max-bp2:col-span-12 bp2:sticky bp2:top-[calc(var(--nav)+24px)]">
+        <p class="eyebrow"><span class="wl-dot" aria-hidden="true"></span>Managed Cloud &middot; early access</p>
+        <h1 id="wl-h" class="mt-5 text-[clamp(2.4rem,4.4vw,3.9rem)] leading-[.95] tracking-[-.05em]">Join the <span class="grad-t">waitlist.</span></h1>
+        <p class="mt-4 max-w-[36ch] text-ink-2 text-[clamp(16px,1.25vw,18px)]">Tell us about your setup. It takes under 2 minutes, and your answers shape what we build first.</p>
+        <ol class="mt-9 grid gap-1 max-bp2:hidden" aria-label="Steps">
+          {steps.map((s, i) => (
+            <li class="group flex items-center gap-3.5 py-2 text-[15px] text-mute transition-colors data-[state=current]:text-ink data-[state=done]:text-ink-2" data-nav={i + 1} data-state={i === 0 ? "current" : "todo"}>
+              <span class="grid place-items-center w-8 h-8 rounded-full border-[1.5px] border-line-2 font-mono text-[11px] transition-all duration-300 group-data-[state=current]:border-ink group-data-[state=current]:bg-chip-bg group-data-[state=current]:text-chip-ink group-data-[state=done]:border-mint-ink group-data-[state=done]:bg-mint group-data-[state=done]:text-ink-f">
+                <span class="group-data-[state=done]:hidden">0{i + 1}</span>
+                <svg class="hidden group-data-[state=done]:block" width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 5"/></svg>
+              </span>
+              {s}
+            </li>
+          ))}
+        </ol>
+        <ul class="mt-9 pt-6 border-t border-line grid gap-2.5 text-[14.5px] text-ink-2 max-bp2:hidden">
+          <li class="flex items-center gap-3"><span class="bar"></span>Early access before public launch</li>
+          <li class="flex items-center gap-3"><span class="bar"></span>No card, no commitment</li>
+          <li class="flex items-center gap-3"><span class="bar"></span>We never share your details</li>
+        </ul>
+      </aside>
+
+      <div class="col-span-8 bp2:col-start-5 max-bp2:col-span-12" data-rv="scale">
+        <div class="rounded-[clamp(20px,2vw,26px)] border border-line-2 bg-surface shadow-[0_30px_70px_-50px_rgba(11,17,24,.5)]" id="wl-card">
+          <div class="px-[clamp(20px,3vw,40px)] pt-[clamp(20px,2.6vw,32px)]">
+            <div class="flex items-center justify-between gap-4 font-mono text-[11px] tracking-[.1em] uppercase text-mute">
+              <span data-step-label aria-live="polite">Step 1 of {steps.length} &middot; {steps[0]}</span>
+              <span data-step-count>1/{steps.length}</span>
+            </div>
+            <div class="mt-3 grid grid-cols-5 gap-1.5" aria-hidden="true">
+              {steps.map((_, i) => <span class="h-1.5 rounded-full bg-line overflow-hidden"><i data-seg class="block h-full w-full rounded-full bg-mint origin-left transition-transform duration-500 ease-std" style={`transform:scaleX(${i === 0 ? 1 : 0})`}></i></span>)}
+            </div>
+          </div>
+
+          <form id="waitlist-form" class="px-[clamp(20px,3vw,40px)] pb-[clamp(20px,2.6vw,32px)]" data-url={import.meta.env.PUBLIC_FORMS_URL} data-to={import.meta.env.PUBLIC_FORMS_SEND_TO} novalidate>
+
+            <div data-step="1" class="grid gap-6 pt-8">
+              <div><h2 class={stepH}>About you</h2><p class={stepP}>{stepIntro[0]}</p></div>
+              <label class={l}>Work email <span class="text-mint-ink" aria-hidden="true">*</span><input class={f} name="email" type="email" required maxlength="150" autocomplete="email" placeholder="you@company.com" /></label>
+              <div class="grid grid-cols-2 max-bp3:grid-cols-1 gap-x-4 gap-y-6">
+                <label class={l}>Name <span class={hint}>(optional)</span><input class={f} name="name" maxlength="100" autocomplete="name" placeholder="Your name" /></label>
+                <label class={l}>Company <span class={hint}>(optional)</span><input class={f} name="company" maxlength="100" autocomplete="organization" placeholder="Where you work" /></label>
+              </div>
+              <fieldset>
+                <legend class={q}>What best describes you?</legend>
+                <div class={og} data-options>
+                  {roleOpts.map((opt) => <label class={o}><input type="radio" name="role" value={opt} class={ri} />{opt}</label>)}
+                  <label class={o}><input type="radio" name="role" value="Other" class={ri} data-other-toggle="roleOther" />Other</label>
+                </div>
+                <input class={f + " mt-2.5"} name="roleOther" placeholder="Tell us your role" maxlength="100" hidden />
+              </fieldset>
+            </div>
+
+            <div data-step="2" class="grid gap-7 pt-8" hidden>
+              <div><h2 class={stepH}>Your setup</h2><p class={stepP}>{stepIntro[1]}</p></div>
+              <fieldset><legend class={q}>How many servers do you manage?</legend><div class={og3} data-options>{serverOpts.map((opt) => <label class={o}><input type="radio" name="servers" value={opt} class={ri} />{opt}</label>)}</div></fieldset>
+              <fieldset><legend class={q}>How many people on your team would use N-Ops?</legend><div class={og3} data-options>{teamOpts.map((opt) => <label class={o}><input type="radio" name="teamSize" value={opt} class={ri} />{opt}</label>)}</div></fieldset>
+            </div>
+
+            <div data-step="3" class="grid gap-7 pt-8" hidden>
+              <div><h2 class={stepH}>Tools &amp; features</h2><p class={stepP}>{stepIntro[2]}</p></div>
+              <fieldset>
+                <legend class={q}>What do you use today? <span class={hint}>Pick any</span></legend>
+                <div class={og3} data-options>
+                  {toolOpts.map((opt) => <label class={o}><input type="checkbox" name="tools" value={opt} class={ri} />{opt}</label>)}
+                  <label class={o}><input type="checkbox" name="tools" value="Other" class={ri} data-other-toggle="toolsOther" />Other</label>
+                </div>
+                <input class={f + " mt-2.5"} name="toolsOther" placeholder="Which other tools?" maxlength="100" hidden />
+              </fieldset>
+              <fieldset>
+                <legend class={q}>Which features matter most to you? <span class={hint}>Pick up to 3</span></legend>
+                <div class={og3} data-options data-max-select="3">{featureOpts.map((opt) => <label class={o}><input type="checkbox" name="features" value={opt} class={ri} />{opt}</label>)}</div>
+              </fieldset>
+            </div>
+
+            <div data-step="4" class="grid gap-7 pt-8" hidden>
+              <div><h2 class={stepH}>Will you pay?</h2><p class={stepP}>{stepIntro[3]}</p></div>
+              <fieldset><legend class={q}>Currency for the price questions</legend><div class={og} data-options id="currency-group"><label class={o}><input type="radio" name="currency" value="USD" checked class={ri} />USD ($)</label><label class={o}><input type="radio" name="currency" value="INR" class={ri} />INR (₹)</label></div></fieldset>
+              <fieldset><legend class={q}>How would you run N-Ops?</legend><div class={og3} data-options>{runOpts.map((opt) => <label class={o}><input type="radio" name="howRun" value={opt} class={ri} />{opt}</label>)}</div></fieldset>
+              <fieldset><legend class={q}>Would your team pay for N-Ops Managed, hosted by us with SLAs and phone support?</legend><div class={og3} data-options id="wouldpay-group">{payOpts.map((opt) => <label class={o}><input type="radio" name="wouldPay" value={opt} class={ri} />{opt}</label>)}</div></fieldset>
+              <div id="pricing-extra" class="grid gap-7" hidden>
+                <fieldset>
+                  <legend class={q}>What monthly price would feel fair for your whole team?</legend>
+                  <div class={og4} data-options data-currency="USD">{priceOpts.map((opt) => <label class={o}><input type="radio" name="fairPrice" value={opt} class={ri} />{opt}</label>)}</div>
+                  <div class={og4} data-options data-currency="INR" hidden>{priceOptsINR.map((opt) => <label class={o}><input type="radio" name="fairPrice" value={opt} class={ri} />{opt}</label>)}</div>
+                </fieldset>
+                <fieldset>
+                  <legend class={q}>At what monthly price would it be too expensive to consider?</legend>
+                  <div class={og4} data-options data-currency="USD">{priceOpts.map((opt) => <label class={o}><input type="radio" name="tooExpensive" value={opt} class={ri} />{opt}</label>)}</div>
+                  <div class={og4} data-options data-currency="INR" hidden>{priceOptsINR.map((opt) => <label class={o}><input type="radio" name="tooExpensive" value={opt} class={ri} />{opt}</label>)}</div>
+                </fieldset>
+                <fieldset><legend class={q}>How would you prefer to pay?</legend><div class={og} data-options>{payPrefOpts.map((opt) => <label class={o}><input type="radio" name="payPreference" value={opt} class={ri} />{opt}</label>)}</div></fieldset>
+                <fieldset><legend class={q}>Who decides on buying tools like this?</legend><div class={og3} data-options>{buyerOpts.map((opt) => <label class={o}><input type="radio" name="buyerRole" value={opt} class={ri} />{opt}</label>)}</div></fieldset>
+              </div>
+            </div>
+
+            <div data-step="5" class="grid gap-7 pt-8" hidden>
+              <div><h2 class={stepH}>Wrap-up</h2><p class={stepP}>{stepIntro[4]}</p></div>
+              <fieldset>
+                <legend class={q}>What do you spend each month today on the tools N-Ops would replace?</legend>
+                <div class={og3} data-options data-currency="USD">{spendOpts.map((opt) => <label class={o}><input type="radio" name="currentSpend" value={opt} class={ri} />{opt}</label>)}</div>
+                <div class={og3} data-options data-currency="INR" hidden>{spendOptsINR.map((opt) => <label class={o}><input type="radio" name="currentSpend" value={opt} class={ri} />{opt}</label>)}</div>
+              </fieldset>
+              <label class={q}>What's the one problem you'd want N-Ops to solve first?<textarea class={ta + " font-normal"} name="topProblem" rows="3" maxlength="1000" placeholder="For example: secrets are scattered across .env files and chat."></textarea></label>
+              <fieldset><legend class={q}>Can we contact you for a 15-minute call?</legend><div class={og} data-options>{contactOpts.map((opt) => <label class={o}><input type="radio" name="canContact" value={opt} class={ri} />{opt}</label>)}</div></fieldset>
+              {key && <div class="cf-turnstile" data-sitekey={key}></div>}
+            </div>
+
+            <div class="mt-9 pt-6 border-t border-line flex items-center gap-3 max-bp4:flex-wrap">
+              <button type="button" data-back class="btn btn-line max-bp4:grow max-bp4:justify-center" hidden>
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 8H3M7 4L3 8l4 4"/></svg>Back
+              </button>
+              <p class="mr-auto font-mono text-[11px] tracking-[.06em] text-mute max-bp3:hidden" data-enter-hint>Press <kbd class="px-1.5 py-0.5 rounded border border-line-2 font-mono">Enter ↵</kbd></p>
+              <button type="button" data-next class="btn btn-dark ml-auto max-bp4:grow max-bp4:justify-center group">Continue
+                <svg class="transition-transform group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+              </button>
+              <button type="submit" data-submit class="btn btn-mint ml-auto max-bp4:grow max-bp4:justify-center" hidden>Join the waitlist</button>
+            </div>
+            <p class="mt-4 min-h-[1.5em] text-[14px] text-mute" role="status" aria-live="polite" data-status></p>
+          </form>
         </div>
-        <div class="mt-3 h-1 rounded-full bg-line-2 overflow-hidden"><div data-progress class="h-full bg-mint transition-[width] duration-300" style="width:25%"></div></div>
-
-        <form id="waitlist-form" class="mt-6 grid gap-4" data-url={import.meta.env.PUBLIC_FORMS_URL} data-to={import.meta.env.PUBLIC_FORMS_SEND_TO} novalidate>
-
-          <div data-step="1" class="grid gap-4">
-            <label class={l}>Email <span class="normal-case text-mint-ink">*</span><input class={f} name="email" type="email" required maxlength="150" autocomplete="email" /></label>
-            <label class={l}>Name<input class={f} name="name" maxlength="100" autocomplete="name" /></label>
-            <label class={l}>Company<input class={f} name="company" maxlength="100" autocomplete="organization" /></label>
-            <div>
-              <p class={l}>What best describes you?</p>
-              <div class={og} data-options>
-                {roleOpts.map((opt) => <label class={o}><input type="radio" name="role" value={opt} class="mt-0.5 accent-mint-ink shrink-0" />{opt}</label>)}
-                <label class={o}><input type="radio" name="role" value="Other" class="mt-0.5 accent-mint-ink shrink-0" data-other-toggle="roleOther" />Other</label>
-              </div>
-              <input class={f} name="roleOther" placeholder="Tell us" maxlength="100" hidden />
-            </div>
-          </div>
-
-          <div data-step="2" class="grid gap-4" hidden>
-            <div><p class={l}>How many servers do you manage?</p><div class={og} data-options>{serverOpts.map((opt) => <label class={o}><input type="radio" name="servers" value={opt} class="mt-0.5 accent-mint-ink shrink-0" />{opt}</label>)}</div></div>
-            <div><p class={l}>How many people on your team would use N-Ops?</p><div class={og} data-options>{teamOpts.map((opt) => <label class={o}><input type="radio" name="teamSize" value={opt} class="mt-0.5 accent-mint-ink shrink-0" />{opt}</label>)}</div></div>
-          </div>
-
-          <div data-step="3" class="grid gap-4" hidden>
-            <div>
-              <p class={l}>What do you use today? <span class="normal-case text-mute">(pick any)</span></p>
-              <div class={og} data-options>
-                {toolOpts.map((opt) => <label class={o}><input type="checkbox" name="tools" value={opt} class="mt-0.5 accent-mint-ink shrink-0" />{opt}</label>)}
-                <label class={o}><input type="checkbox" name="tools" value="Other" class="mt-0.5 accent-mint-ink shrink-0" data-other-toggle="toolsOther" />Other</label>
-              </div>
-              <input class={f} name="toolsOther" placeholder="Tell us" maxlength="100" hidden />
-            </div>
-            <div>
-              <p class={l}>Which features matter most to you? <span class="normal-case text-mute">(pick up to 3)</span></p>
-              <div class={og} data-options data-max-select="3">{featureOpts.map((opt) => <label class={o}><input type="checkbox" name="features" value={opt} class="mt-0.5 accent-mint-ink shrink-0" />{opt}</label>)}</div>
-            </div>
-          </div>
-
-          <div data-step="4" class="grid gap-4" hidden>
-            <div><p class={l}>Currency for the price questions below</p><div class={og + " grid-cols-2"} data-options id="currency-group"><label class={o}><input type="radio" name="currency" value="USD" checked class="mt-0.5 accent-mint-ink shrink-0" />USD</label><label class={o}><input type="radio" name="currency" value="INR" class="mt-0.5 accent-mint-ink shrink-0" />INR</label></div></div>
-            <div><p class={l}>How would you run N-Ops?</p><div class={og} data-options>{runOpts.map((opt) => <label class={o}><input type="radio" name="howRun" value={opt} class="mt-0.5 accent-mint-ink shrink-0" />{opt}</label>)}</div></div>
-            <div><p class={l}>Would your team pay for N-Ops Managed, hosted by us with SLAs and phone support?</p><div class={og} data-options id="wouldpay-group">{payOpts.map((opt) => <label class={o}><input type="radio" name="wouldPay" value={opt} class="mt-0.5 accent-mint-ink shrink-0" />{opt}</label>)}</div></div>
-            <div id="pricing-extra" class="grid gap-4" hidden>
-              <div>
-                <p class={l}>What monthly price would feel fair for your whole team?</p>
-                <div class={og} data-options data-currency="USD">{priceOpts.map((opt) => <label class={o}><input type="radio" name="fairPrice" value={opt} class="mt-0.5 accent-mint-ink shrink-0" />{opt}</label>)}</div>
-                <div class={og} data-options data-currency="INR" hidden>{priceOptsINR.map((opt) => <label class={o}><input type="radio" name="fairPrice" value={opt} class="mt-0.5 accent-mint-ink shrink-0" />{opt}</label>)}</div>
-              </div>
-              <div>
-                <p class={l}>At what monthly price would it be too expensive to consider?</p>
-                <div class={og} data-options data-currency="USD">{priceOpts.map((opt) => <label class={o}><input type="radio" name="tooExpensive" value={opt} class="mt-0.5 accent-mint-ink shrink-0" />{opt}</label>)}</div>
-                <div class={og} data-options data-currency="INR" hidden>{priceOptsINR.map((opt) => <label class={o}><input type="radio" name="tooExpensive" value={opt} class="mt-0.5 accent-mint-ink shrink-0" />{opt}</label>)}</div>
-              </div>
-              <div><p class={l}>How would you prefer to pay?</p><div class={og} data-options>{payPrefOpts.map((opt) => <label class={o}><input type="radio" name="payPreference" value={opt} class="mt-0.5 accent-mint-ink shrink-0" />{opt}</label>)}</div></div>
-              <div><p class={l}>Who decides on buying tools like this?</p><div class={og} data-options>{buyerOpts.map((opt) => <label class={o}><input type="radio" name="buyerRole" value={opt} class="mt-0.5 accent-mint-ink shrink-0" />{opt}</label>)}</div></div>
-            </div>
-          </div>
-
-          <div data-step="5" class="grid gap-4" hidden>
-            <div>
-              <p class={l}>What do you spend each month today on the tools N-Ops would replace?</p>
-              <div class={og} data-options data-currency="USD">{spendOpts.map((opt) => <label class={o}><input type="radio" name="currentSpend" value={opt} class="mt-0.5 accent-mint-ink shrink-0" />{opt}</label>)}</div>
-              <div class={og} data-options data-currency="INR" hidden>{spendOptsINR.map((opt) => <label class={o}><input type="radio" name="currentSpend" value={opt} class="mt-0.5 accent-mint-ink shrink-0" />{opt}</label>)}</div>
-            </div>
-            <label class={l}>What's the one problem you'd want N-Ops to solve first?<textarea class={f} name="topProblem" rows="3" maxlength="1000"></textarea></label>
-            <div><p class={l}>Can we contact you for a 15-minute call?</p><div class={og} data-options>{contactOpts.map((opt) => <label class={o}><input type="radio" name="canContact" value={opt} class="mt-0.5 accent-mint-ink shrink-0" />{opt}</label>)}</div></div>
-            {key && <div class="cf-turnstile" data-sitekey={key}></div>}
-          </div>
-
-          <div class="flex flex-wrap items-center gap-3 pt-2">
-            <button type="button" data-back class="btn btn-line" hidden>Back</button>
-            <button type="button" data-next class="btn btn-mint">Next</button>
-            <button type="submit" data-submit class="btn btn-mint" hidden>Join waitlist</button>
-            <p class="text-[14px] text-mute" role="status" aria-live="polite" data-status></p>
-          </div>
-        </form>
       </div>
     </div>
   </div>
@@ -141,25 +194,35 @@ const steps = ["About you", "Your setup", "Tools & features", "Will you pay", "W
   const submitBtn = form.querySelector("[data-submit]");
   const stepLabel = document.querySelector("[data-step-label]");
   const stepCount = document.querySelector("[data-step-count]");
-  const progress = document.querySelector("[data-progress]");
+  const segs = Array.from(document.querySelectorAll("[data-seg]"));
+  const navItems = Array.from(document.querySelectorAll("[data-nav]"));
+  const card = document.getElementById("wl-card");
+  const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const status = form.querySelector("[data-status]");
   let current = 1;
 
-  function showStep(n) {
+  function showStep(n, focus) {
     current = n;
     stepEls.forEach((el) => (el.hidden = Number(el.dataset.step) !== n));
     backBtn.hidden = n === 1;
     nextBtn.hidden = n === steps.length;
     submitBtn.hidden = n !== steps.length;
-    stepLabel.textContent = `Step ${n} of ${steps.length} — ${steps[n - 1]}`;
+    stepLabel.textContent = `Step ${n} of ${steps.length} · ${steps[n - 1]}`;
     stepCount.textContent = `${n}/${steps.length}`;
-    progress.style.width = `${(n / steps.length) * 100}%`;
+    segs.forEach((s, i) => (s.style.transform = `scaleX(${i < n ? 1 : 0})`));
+    navItems.forEach((li, i) => (li.dataset.state = i + 1 < n ? "done" : i + 1 === n ? "current" : "todo"));
+    if (!focus) return;
+    const el = stepEls[n - 1];
+    if (!RM) el.animate([{ opacity: 0, transform: "translateY(14px)" }, { opacity: 1, transform: "none" }], { duration: 450, easing: "cubic-bezier(.22,1,.36,1)" });
+    // keep the top of the card in view on small screens, then put the cursor in the first field
+    if (card.getBoundingClientRect().top < 0) card.scrollIntoView({ behavior: RM ? "auto" : "smooth", block: "start" });
+    el.querySelector("input:not([type=hidden]):not([hidden]), textarea")?.focus({ preventScroll: true });
   }
 
-  backBtn.addEventListener("click", () => showStep(Math.max(1, current - 1)));
+  backBtn.addEventListener("click", () => showStep(Math.max(1, current - 1), true));
   nextBtn.addEventListener("click", () => {
     if (current === 1 && !form.email.reportValidity()) return;
-    showStep(Math.min(steps.length, current + 1));
+    showStep(Math.min(steps.length, current + 1), true);
   });
   // Enter in a text field should advance a step, not submit the form early.
   form.addEventListener("keydown", (e) => {

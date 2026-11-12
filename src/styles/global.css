@@ -70,8 +70,10 @@
   .btn.sm{@apply h-[42px] px-4 rounded-[11px] text-[14.5px] gap-[9px]}
 
   /* section scaffolding, reused by every content section below */
-  .sec{padding:clamp(80px,11vw,168px) 0}
+  .sec{padding:clamp(64px,8vw,128px) 0}
   .sec.alt{@apply bg-bg-2}
+  /* two sections on the same background read as one band: don't stack both paddings */
+  .sec:not(.alt)+.sec:not(.alt),.sec.alt+.sec.alt{padding-top:0}
   .sh{@apply items-start;margin-bottom:clamp(44px,6vw,88px)}
   .sh-num{@apply col-span-2 max-bp2:col-span-12 max-bp2:mb-[46px] font-light text-line-2 relative;font-size:clamp(3.4rem,7.4vw,7.4rem);line-height:.8;letter-spacing:-.06em}
   .sh-num::after{content:"";position:absolute;left:.06em;top:calc(100% + 18px);width:.42em;height:7px;background:var(--color-mint);transform-origin:0 50%;transition:transform .9s var(--e) .25s}
@@ -82,7 +84,8 @@
 }
 
 @layer base{
-  h2{@apply max-w-[15ch];font-size:clamp(2.5rem,6vw,5.6rem);line-height:.92;letter-spacing:-.05em}
+  h2{@apply max-w-[15ch];font-size:clamp(2.5rem,6vw,5.6rem);line-height:.92;letter-spacing:-.05em;text-wrap:balance}
+  h3{text-wrap:balance}
 }
 
 /* hero heading reveal: staggered per-line keyframes, kept as CSS (not utility-expressible) */
@@ -117,6 +120,72 @@ h1 .end .bar{width:.48em;height:.14em;vertical-align:.08em;margin-left:.08em;ani
 
 
 
+
+/* ───────── scroll reveal: one motion language for every page ─────────
+   site.js tags elements with data-rv and adds .in when they enter the viewport.
+   Elements that enter together get a staggered --d delay. Animations (not transitions) are used so
+   hover transitions on the same elements keep working, and "backwards" fill means nothing is held
+   once the entrance ends. Only active under .anim (JS on, motion allowed). */
+.anim [data-rv]:not(.in){opacity:0}
+.anim [data-rv].in{animation:rvUp .95s var(--e) var(--d,0ms) backwards}
+.anim [data-rv="scale"].in{animation-name:rvScale}
+.anim [data-rv="left"].in{animation-name:rvLeft}
+.anim [data-rv="right"].in{animation-name:rvRight}
+@keyframes rvUp{from{opacity:0;transform:translateY(28px)}}
+@keyframes rvScale{from{opacity:0;transform:translateY(36px) scale(.965)}}
+@keyframes rvLeft{from{opacity:0;transform:translateX(-48px)}}
+@keyframes rvRight{from{opacity:0;transform:translateX(48px)}}
+@media (max-width:960px){.anim [data-rv="left"].in,.anim [data-rv="right"].in{animation-name:rvUp}}
+/* section headers: number bar already draws in; the text block follows line by line */
+.anim .sh:not(.in) .sh-main>*{opacity:0}
+.anim .sh.in .sh-main>*{animation:rvUp .95s var(--e) backwards}
+.anim .sh.in .sh-main>:nth-child(2){animation-delay:.08s}
+.anim .sh.in .sh-main>:nth-child(3){animation-delay:.16s}
+/* rows inside a revealed mock window arrive one after another */
+.anim .rv-rows:not(.in) [data-row]{opacity:0}
+.anim .rv-rows.in [data-row]{animation:rvRow .6s var(--e) backwards;animation-delay:calc(.3s + var(--i,0) * 70ms)}
+@keyframes rvRow{from{opacity:0;transform:translateY(10px)}}
+/* the top section of every page is already on screen at load: no entrance there. Otherwise it
+   paints, gets hidden the moment JS adds .anim, then fades back — a visible flicker on navigation.
+   (The home hero has its own CSS-only load animation, which isn't affected.) */
+.anim main>section:first-child :is([data-rv],[data-row],.sh .sh-main>*){opacity:1!important;animation:none!important}
+.anim main>section:first-child .sh .sh-num::after{transform:none!important;transition:none!important}
+
+/* ───────── architecture: scroll timeline ─────────
+   A rail runs down the middle (left edge on small screens). Its fill scales with scroll
+   progress through the section (--p from site.js); each step's node lights up as its row
+   reaches the middle of the screen. */
+.arch{position:relative}
+.arch-rail{position:absolute;top:0;bottom:0;left:50%;width:2px;margin-left:-1px;background:var(--color-line);border-radius:2px;pointer-events:none}
+.arch-rail i{position:absolute;inset:0;border-radius:inherit;background:linear-gradient(var(--color-mint),var(--color-violet));transform-origin:50% 0;transform:scaleY(var(--p,1))}
+.anim .arch-rail i{transform:scaleY(var(--p,0))}
+.arch-node{position:absolute;left:50%;top:50%;z-index:1;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;display:grid;place-items:center;background:var(--color-bg);border:2px solid var(--color-line-2);font:500 11px/1 var(--font-mono);letter-spacing:.06em;color:var(--color-mute);transition:border-color .5s var(--e),color .5s var(--e),box-shadow .5s var(--e),transform .5s var(--e)}
+.arch-row.on .arch-node,:not(.anim) .arch-node{border-color:var(--color-mint-ink);color:var(--color-ink);box-shadow:0 0 0 7px color-mix(in srgb,var(--color-mint) 18%,transparent)}
+.anim .arch-row.on .arch-node{transform:scale(1.08)}
+@media (max-width:960px){
+  .arch-rail{left:17px}
+  .arch-row{padding-left:52px}
+  .arch-node{left:17px;top:clamp(32px,4.5vw,64px);margin-top:-6px;width:36px;height:36px;margin-left:-18px;font-size:10px}
+}
+
+/* ───────── floating waitlist pill (WaitlistFab.astro) ─────────
+   A rotating conic gradient sits behind a 1.5px inset, so only a thin animated rim shows.
+   @property lets the angle itself animate; browsers without it get a static gradient rim. */
+@property --wl-a{syntax:"<angle>";inherits:false;initial-value:0deg}
+.wl-fab{position:fixed;right:clamp(12px,2vw,24px);bottom:clamp(12px,2vw,24px);z-index:60;transform:translateY(calc(100% + 32px));opacity:0;visibility:hidden;transition:transform .7s var(--e),opacity .5s var(--e),visibility 0s linear .7s}
+.wl-fab.show{transform:none;opacity:1;visibility:visible;transition:transform .7s var(--e),opacity .5s var(--e),visibility 0s}
+.wl-rim{position:relative;display:block;padding:1.5px;border-radius:20px;background:conic-gradient(from var(--wl-a),var(--color-mint),var(--color-violet),transparent 40%,transparent 60%,var(--color-mint));animation:wlSpin 4.5s linear infinite;box-shadow:0 24px 48px -20px rgba(11,17,24,.55)}
+.wl-rim::after{content:"";position:absolute;inset:-14px;border-radius:30px;background:radial-gradient(60% 60% at 30% 50%,rgba(76,242,192,.28),transparent 70%);filter:blur(10px);z-index:-1;animation:wlGlow 3.2s ease-in-out infinite}
+.wl-fab.show .wl-rim{animation:wlSpin 4.5s linear infinite,wlBob 3.6s ease-in-out .8s infinite}
+.wl-fab:hover .wl-rim,.wl-fab:focus-within .wl-rim{animation-play-state:running,paused}
+@keyframes wlSpin{to{--wl-a:360deg}}
+@keyframes wlBob{50%{transform:translateY(-5px)}}
+@keyframes wlGlow{50%{opacity:.35}}
+.wl-dot{position:relative;width:8px;height:8px;border-radius:50%;background:var(--color-mint);flex:none}
+.wl-dot::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--color-mint);animation:wlPing 1.8s var(--e) infinite}
+@keyframes wlPing{0%{transform:scale(1);opacity:.7}100%{transform:scale(3);opacity:0}}
+.wl-go svg{transition:transform .3s var(--e)}
+.wl-card:hover .wl-go svg{transform:translateX(3px)}
 
 /* ───────── responsive ───────── */
 @media (max-width:760px){

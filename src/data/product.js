@@ -1,5 +1,17 @@
 // The nine modules in the N-Ops sidebar. Header dropdown, the home page list, the /product/[slug] pages and prev/next links all read this.
 // Order and names follow the product deck. Fields: slug, n, title, short, lead, tags (home page chips), points, details (3), sections, mock.
+/**
+ * Shapes, so TypeScript reads the nested arrays as fixed tuples rather than "string or list".
+ * @typedef {[string, string]} Row             label, value (details, section items, mock rows)
+ * @typedef {[string, string, Row[]]} Section  title, intro, items
+ * @typedef {{
+ *   slug: string, n: string, title: string, short: string, lead: string,
+ *   tags: string[], points: string[], details: Row[], sections: Section[],
+ *   mock: [string, string, Row[]]
+ * }} Area
+ */
+
+/** @type {Area[]} */
 export const areas = [
   {
     slug: 'admin', n: '01', title: 'People, roles & audit',

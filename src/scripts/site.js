@@ -41,6 +41,57 @@
     $$('.sh, .cap').forEach(el => io.observe(el));
   }
 
+  /* ───── scroll reveal (see "scroll reveal" in global.css) ─────
+     Pages mostly don't annotate anything: headings, intro paragraphs and the children of card grids
+     are tagged here, so every page gets the same entrance. Markup can still opt in with data-rv="…"
+     or opt a subtree out with data-rv-off. The home hero has its own load animation, and forms
+     are left alone so inputs never fade while someone is typing. */
+  if (!RM) {
+    const main = $('main');
+    // the first section is on screen at load, so it gets no entrance (see global.css for why)
+    const skip = el => el.closest('form, .sh, [data-rv-off], .arch-row, main > section:first-child');
+    // never animate something that already moves with a tagged ancestor
+    const tag = el => { if (!el.closest('[data-rv]')) el.setAttribute('data-rv', ''); };
+    // grids of cards / rows first: each child enters on its own, staggered with its neighbours
+    $$('[class*="grid-cols-"], .caps, .parts', main).forEach(g => {
+      if (skip(g) || g.children.length < 2 || g.matches('[class*="grid-cols-12"]') || g.closest('[data-rv]')) return;
+      [...g.children].forEach(tag);
+    });
+    $$(':is(.eyebrow, h1, h2, h1 + p, h2 + p)', main).forEach(el => { if (!skip(el)) tag(el); });
+    const rio = new IntersectionObserver(es => {
+      let k = 0;
+      es.forEach(e => {
+        if (!e.isIntersecting) return;
+        e.target.style.setProperty('--d', Math.min(k++, 6) * 75 + 'ms');
+        e.target.classList.add('in');
+        rio.unobserve(e.target);
+      });
+    }, { threshold: .12, rootMargin: '0px 0px -6% 0px' });
+    $$('[data-rv], .rv-rows').forEach(el => rio.observe(el));
+    // number the rows inside mock windows so they can cascade in
+    $$('.rv-rows').forEach(w => $$('[data-row]', w).forEach((r, i) => r.style.setProperty('--i', i)));
+  }
+
+  /* ───── architecture timeline: rail fill follows scroll, nodes light up at mid-screen ───── */
+  const arch = $('.arch');
+  if (arch && !RM) {
+    const rail = $('.arch-rail', arch), rows = $$('.arch-row', arch);
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const r = arch.getBoundingClientRect(), mid = innerHeight * .55;
+      const p = Math.max(0, Math.min(1, (mid - r.top) / r.height));
+      rail.style.setProperty('--p', p.toFixed(4));
+      rows.forEach(row => { const b = row.getBoundingClientRect(); row.classList.toggle('on', b.top + b.height / 2 < mid + 40); });
+    };
+    const req = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+    new IntersectionObserver(es => {
+      if (es[0].isIntersecting) { addEventListener('scroll', req, { passive: true }); req(); }
+      else removeEventListener('scroll', req);
+    }, { rootMargin: '20% 0px' }).observe(arch);
+    addEventListener('resize', req);
+  }
+
   /* ───── node field (hero + cta) ─────
      40 nodes. Each has a "home" on the N path (4 anchors + points spaced along the 3 strokes)
      and a "free" position drifting around the canvas. m ∈ [0,1] mixes home→free.
