@@ -24,3 +24,7 @@ public/                     favicon, robots.txt
 | `npm run preview`      | Preview the production build locally     |
 
 `astro.config.mjs` sets `site` to `https://nops.app` for canonical URLs and the sitemap — update it if that domain changes.
+
+## License
+
+Licensed under the [GNU GPL v3.0](LICENSE).

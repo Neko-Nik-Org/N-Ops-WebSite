@@ -1,0 +1,6 @@
+/product/organization-access /product/admin 301
+/product/secrets-configuration /product/vault 301
+/product/servers-monitoring /product/servers 301
+/product/containers-services /product/tools 301
+/product/jobs-automation /product/workflows 301
+/product/extensions-audit /product/metrics 301

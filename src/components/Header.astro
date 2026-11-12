@@ -5,7 +5,6 @@ import { areas } from "../data/product.js";
   <div class="wrap nav flex items-center justify-between h-[var(--nav)] gap-5">
     <a href="/" class="brand wm inline-flex items-center gap-[11px] font-bold text-[22px] tracking-[-.035em]" aria-label="N-Ops home"><svg aria-hidden="true" class="w-[34px] h-[34px] flex-none"><use href="#fpLogo"/></svg><span>N<span class="hy text-mint">-</span>Ops</span></a>
     <nav class="nav-links max-bp2:hidden flex self-stretch items-center gap-7 text-[15px] text-ink-2" aria-label="Primary">
-      <a href="/#plain" class="relative py-1.5 hover:text-ink after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:w-3 after:bg-mint after:origin-left after:scale-x-0 after:transition-transform after:duration-300 after:ease-std hover:after:scale-x-100">How it works</a>
       <div class="nav-dd group/dd self-stretch flex items-center">
         <a href="/#chapters" class="relative py-1.5 hover:text-ink after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:w-3 after:bg-mint after:origin-left after:scale-x-0 after:transition-transform after:duration-300 after:ease-std hover:after:scale-x-100 inline-flex items-center gap-1" aria-haspopup="true">Product<svg class="w-3 h-3 transition-transform group-hover/dd:rotate-180 group-focus-within/dd:rotate-180" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5l3 3 3-3"/></svg></a>
         <div class="pointer-events-none invisible opacity-0 fixed inset-x-0 top-[var(--nav)] bottom-0 bg-bg/40 backdrop-blur-md transition-opacity duration-300 group-hover/dd:visible group-hover/dd:opacity-100 group-focus-within/dd:visible group-focus-within/dd:opacity-100" aria-hidden="true"></div>
@@ -22,6 +21,7 @@ import { areas } from "../data/product.js";
       <a href="/#security" class="relative py-1.5 hover:text-ink after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:w-3 after:bg-mint after:origin-left after:scale-x-0 after:transition-transform after:duration-300 after:ease-std hover:after:scale-x-100">Security</a>
       <a href="/pricing" class="relative py-1.5 hover:text-ink after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:w-3 after:bg-mint after:origin-left after:scale-x-0 after:transition-transform after:duration-300 after:ease-std hover:after:scale-x-100">Pricing</a>
       <a href="/faq" class="relative py-1.5 hover:text-ink after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:w-3 after:bg-mint after:origin-left after:scale-x-0 after:transition-transform after:duration-300 after:ease-std hover:after:scale-x-100">FAQ</a>
+      <a href="/contact" class="relative py-1.5 hover:text-ink after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:w-3 after:bg-mint after:origin-left after:scale-x-0 after:transition-transform after:duration-300 after:ease-std hover:after:scale-x-100">Contact</a>
     </nav>
     <div class="nav-r flex items-center gap-2.5">
       <a class="gh max-bp2:hidden inline-flex items-center gap-2 h-[42px] px-3.5 rounded-[11px] border border-line-2 text-[14.5px] font-medium bg-surface/70 transition-colors hover:border-ink" href="https://github.com/Neko-Nik-Org/N-Ops-Main-API" rel="noopener"><svg aria-hidden="true" class="w-[17px] h-[17px]"><use href="#i-gh"/></svg>GitHub</a>
@@ -35,7 +35,7 @@ import { areas } from "../data/product.js";
       </button>
     </div>
   </div>
-  <div class="sheet hidden max-bp2:block absolute left-0 right-0 top-full bg-surface border-b border-line shadow-[0_30px_40px_-30px_rgba(11,17,24,.3)] px-[var(--pad)] pt-2 pb-6 [&[hidden]]:hidden" id="sheet" hidden>
+  <div class="sheet hidden max-bp2:block max-h-[calc(100dvh-var(--nav))] overflow-y-auto overscroll-contain absolute left-0 right-0 top-full bg-surface border-b border-line shadow-[0_30px_40px_-30px_rgba(11,17,24,.3)] px-[var(--pad)] pt-2 pb-6 [&[hidden]]:hidden" id="sheet" hidden>
     <a href="/#plain" class="flex justify-between py-4 border-b border-line text-[22px] font-semibold tracking-[-.03em]">How it works <span class="font-mono text-xs text-mute self-center">01</span></a>
     <a href="/#chapters" class="flex justify-between py-4 border-b border-line text-[22px] font-semibold tracking-[-.03em]">Product <span class="font-mono text-xs text-mute self-center">02</span></a>
     {areas.map(a => <a href={`/product/${a.slug}`} class="flex justify-between py-3 pl-4 border-b border-line text-[17px] text-ink-2">{a.title}</a>)}
@@ -44,6 +44,7 @@ import { areas } from "../data/product.js";
     <a href="/#open-source" class="flex justify-between py-4 border-b border-line text-[22px] font-semibold tracking-[-.03em]">Open source <span class="font-mono text-xs text-mute self-center">05</span></a>
     <a href="/pricing" class="flex justify-between py-4 border-b border-line text-[22px] font-semibold tracking-[-.03em]">Pricing <span class="font-mono text-xs text-mute self-center">06</span></a>
     <a href="/faq" class="flex justify-between py-4 border-b border-line text-[22px] font-semibold tracking-[-.03em]">FAQ <span class="font-mono text-xs text-mute self-center">07</span></a>
+    <a href="/contact" class="flex justify-between py-4 border-b border-line text-[22px] font-semibold tracking-[-.03em]">Contact <span class="font-mono text-xs text-mute self-center">08</span></a>
     <a class="gh inline-flex items-center gap-2 mt-[18px] text-[15px] border-b border-line-2 pb-1" href="https://github.com/Neko-Nik-Org/N-Ops-Main-API" rel="noopener"><svg aria-hidden="true" class="w-[17px] h-[17px]"><use href="#i-gh"/></svg>Star on GitHub</a>
   </div>
 </header>
