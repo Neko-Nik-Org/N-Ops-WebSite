@@ -4,3 +4,18 @@
 /product/containers-services /product/tools 301
 /product/jobs-automation /product/workflows 301
 /product/extensions-audit /product/metrics 301
+
+# Old trailing-slash URLs (live before the switch to /page) -> one canonical URL each
+/contact/ /contact 301
+/faq/ /faq 301
+/pricing/ /pricing 301
+/product/admin/ /product/admin 301
+/product/approvals/ /product/approvals 301
+/product/metrics/ /product/metrics 301
+/product/servers/ /product/servers 301
+/product/service-logs/ /product/service-logs 301
+/product/service-management/ /product/service-management 301
+/product/tools/ /product/tools 301
+/product/vault/ /product/vault 301
+/product/workflows/ /product/workflows 301
+/waitlist/ /waitlist 301

@@ -19,7 +19,7 @@ const tone = (v: string) => /offline|denied|failed|off\b/i.test(v) ? "bad" : /on
 const pad = (n: number) => String(n).padStart(2, "0");
 const neighbours = [["prev", prev], ["next", next]] as const;
 ---
-<BaseLayout title={`${a.title} — N-Ops`} description={a.lead} path={`/product/${a.slug}`}>
+<BaseLayout title={`${a.title} — N-Ops Control Plane`} description={a.lead} path={`/product/${a.slug}`}>
 
 <!-- hero -->
 <section class="relative pt-[clamp(24px,4vw,56px)] pb-[clamp(48px,7vw,104px)]" aria-labelledby="pr-h">

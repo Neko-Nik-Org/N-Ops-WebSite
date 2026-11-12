@@ -10,9 +10,31 @@ interface Props {
   title: string;
   description: string;
   path?: string;
+  noindex?: boolean;
 }
 
-const { title, description, path = "/" } = Astro.props;
+const { title, description, path = "/", noindex = false } = Astro.props;
+
+// Site-wide structured data: the product, who makes it, and the site itself.
+const ld = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization", "@id": "https://nops.app/#org", name: "N-Ops", url: "https://nops.app",
+      logo: "https://nops.app/favicon.svg",
+      sameAs: ["https://github.com/Neko-Nik-Org/N-Ops-Main-API"],
+    },
+    { "@type": "WebSite", "@id": "https://nops.app/#site", name: "N-Ops", url: "https://nops.app", publisher: { "@id": "https://nops.app/#org" } },
+    {
+      "@type": "SoftwareApplication", name: "N-Ops", url: "https://nops.app", image: "https://nops.app/og.png",
+      applicationCategory: "DeveloperApplication", operatingSystem: "Linux",
+      license: "https://www.gnu.org/licenses/gpl-3.0.html",
+      description: "Open-source infrastructure control plane for servers, secrets, containers and jobs.",
+      publisher: { "@id": "https://nops.app/#org" },
+      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    },
+  ],
+};
 ---
 
 <!doctype html>
@@ -20,7 +42,7 @@ const { title, description, path = "/" } = Astro.props;
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <Seo title={title} description={description} path={path} />
+  <Seo title={title} description={description} path={path} noindex={noindex} />
   <meta name="theme-color" content="#F4F6F8" />
   <script is:inline>
     (() => {
@@ -37,9 +59,7 @@ const { title, description, path = "/" } = Astro.props;
   />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="generator" content={Astro.generator} />
-  <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"SoftwareApplication","name":"N-Ops","applicationCategory":"DeveloperApplication","operatingSystem":"Linux","license":"https://www.gnu.org/licenses/gpl-3.0.html","description":"Open-source infrastructure control plane for servers, secrets, containers and jobs.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
-  </script>
+  <script type="application/ld+json" set:html={JSON.stringify(ld)} />
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
