@@ -3,6 +3,7 @@ import Seo from "../components/Seo.astro";
 import IconSprite from "../components/IconSprite.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import WaitlistFab from "../components/WaitlistFab.astro";
 import "../styles/global.css";
 
 interface Props {
@@ -54,6 +55,8 @@ const { title, description, path = "/" } = Astro.props;
 </main>
 
 <Footer />
+
+{path !== "/waitlist" && <WaitlistFab />}
 
 <script src="../scripts/site.js"></script>
 </body>

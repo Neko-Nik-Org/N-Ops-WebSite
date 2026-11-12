@@ -1,0 +1,43 @@
+---
+/* Floating "join the waitlist" pill, shown on every page except /waitlist.
+   Slides in once the visitor scrolls past the first screen, hides while another waitlist
+   call-to-action (anything marked data-wl-hide) is on screen, and can be dismissed for a few days. */
+---
+<aside class="wl-fab" id="wlFab" aria-label="Managed Cloud waitlist">
+  <span class="wl-rim">
+    <span class="wl-card relative flex items-center gap-3.5 rounded-[18.5px] bg-chip-bg text-chip-ink py-2.5 pl-4 pr-2.5 max-bp4:pl-3.5">
+      <a href="/waitlist" class="flex items-center gap-3.5 after:content-[''] after:absolute after:inset-0 after:rounded-[18.5px]">
+        <span class="wl-dot" aria-hidden="true"></span>
+        <span class="flex flex-col leading-tight">
+          <span class="font-mono text-[10.5px] tracking-[.12em] uppercase opacity-60 max-bp4:hidden">Managed Cloud · early access</span>
+          <span class="text-[15.5px] font-semibold tracking-[-.015em]">Join the waitlist</span>
+        </span>
+        <span class="wl-go grid place-items-center w-9 h-9 rounded-[11px] bg-mint text-ink-f" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </span>
+      </a>
+      <button type="button" class="relative z-[1] grid place-items-center w-7 h-7 rounded-lg opacity-55 transition-opacity hover:opacity-100 focus-visible:opacity-100" data-wl-close aria-label="Dismiss waitlist reminder">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M2.5 2.5l7 7M9.5 2.5l-7 7"/></svg>
+      </button>
+    </span>
+  </span>
+</aside>
+<script is:inline>
+  (() => {
+    const fab = document.getElementById('wlFab'); if (!fab) return;
+    const KEY = 'wl-dismissed', DAYS = 3;
+    try { const t = +localStorage.getItem(KEY); if (t && Date.now() - t < DAYS * 864e5) { fab.remove(); return; } } catch {}
+    let scrolled = false, blockers = 0;
+    const sync = () => fab.classList.toggle('show', scrolled && blockers === 0);
+    const onScroll = () => { scrolled = scrollY > Math.min(innerHeight * .6, 520); sync(); };
+    addEventListener('scroll', onScroll, { passive: true }); onScroll();
+    // hide while another waitlist CTA is visible, so the page never shows two at once
+    const seen = new Set();
+    const io = new IntersectionObserver(es => { es.forEach(e => e.isIntersecting ? seen.add(e.target) : seen.delete(e.target)); blockers = seen.size; sync(); }, { threshold: .15 });
+    document.querySelectorAll('[data-wl-hide]').forEach(el => io.observe(el));
+    fab.querySelector('[data-wl-close]').addEventListener('click', () => {
+      try { localStorage.setItem(KEY, String(Date.now())); } catch {}
+      fab.classList.remove('show'); setTimeout(() => fab.remove(), 700);
+    });
+  })();
+</script>
