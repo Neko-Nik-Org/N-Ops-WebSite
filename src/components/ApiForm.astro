@@ -1,5 +1,6 @@
 ---
-// kind="contact" -> name, email, message. kind="waitlist" -> name, email, phone (sent as "Waitlist Request:\n\n<phone>").
+// Posts {name, email, message, send_to} to the external forms API. Used by the contact page;
+// the waitlist form lives at /waitlist as its own stepper (see src/pages/waitlist.astro).
 const { kind, button } = Astro.props;
 const key = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 const f = "mt-1.5 w-full rounded-xl border border-line-2 bg-transparent px-4 py-3 text-[16px] focus:outline-2 focus:outline-mint";
@@ -8,16 +9,7 @@ const l = "block font-mono text-[10.5px] tracking-[.14em] uppercase text-mute";
 <form class="mt-6 grid gap-4" data-api-form={kind} data-url={import.meta.env.PUBLIC_FORMS_URL} data-to={import.meta.env.PUBLIC_FORMS_SEND_TO}>
   <label class={l}>Name<input class={f} name="name" required maxlength="100" autocomplete="name" /></label>
   <label class={l}>Email<input class={f} name="email" type="email" required maxlength="150" autocomplete="email" /></label>
-  {kind === "waitlist"
-    ? <>
-        <label class={l}>Phone<input class={f} name="phone" type="tel" required maxlength="20" autocomplete="tel" /></label>
-        <label class={l}>Why do you want to join?<textarea class={f} name="reason" rows="3" required maxlength="1000"></textarea></label>
-        <label class={l}>Are you willing to pay?
-          <select class={f} name="pay" required><option value="" disabled selected>Select</option><option>Yes</option><option>No</option></select>
-        </label>
-        <label class={l} data-amount hidden>How much would you pay per month?<input class={f} name="amount" maxlength="50" placeholder="e.g. $20" /></label>
-      </>
-    : <label class={l}>Message<textarea class={f} name="message" rows="4" required maxlength="2000"></textarea></label>}
+  <label class={l}>Message<textarea class={f} name="message" rows="4" required maxlength="2000"></textarea></label>
   {key && <div class="cf-turnstile" data-sitekey={key}></div>}
   <div class="flex flex-wrap items-center gap-4"><button class="btn btn-mint" type="submit">{button}</button><p class="text-[14px] text-mute" role="status" aria-live="polite" data-status></p></div>
 </form>
@@ -40,26 +32,20 @@ const l = "block font-mono text-[10.5px] tracking-[.14em] uppercase text-mute";
   document.querySelectorAll<HTMLFormElement>("form[data-api-form]").forEach((form) => {
     const status = form.querySelector<HTMLElement>("[data-status]")!;
     const btn = form.querySelector<HTMLButtonElement>("button")!;
-    const amount = form.querySelector<HTMLElement>("[data-amount]");
-    form.querySelector("[name=pay]")?.addEventListener("change", (e) => { amount!.hidden = (e.target as HTMLSelectElement).value !== "Yes"; });
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const d = new FormData(form);
       const token = String(d.get("cf-turnstile-response") ?? "");
       if (!token) { status.textContent = "Please complete the captcha first."; return; }
-      const pay = d.get("pay");
-      const message = form.dataset.apiForm === "waitlist"
-        ? `Waitlist Request:\n\nPhone: ${d.get("phone")}\nReason for joining: ${d.get("reason")}\nWilling to pay: ${pay}` + (pay === "Yes" ? `\nExpected price: ${d.get("amount") || "not specified"}` : "")
-        : d.get("message");
       btn.disabled = true; status.textContent = "Sending…";
       try {
         const res = await fetch(form.dataset.url!, {
           method: "POST",
           headers: { "content-type": "application/json", "x-cf-token": token },
-          body: JSON.stringify({ name: d.get("name"), email: d.get("email"), message, send_to: form.dataset.to }),
+          body: JSON.stringify({ name: d.get("name"), email: d.get("email"), message: d.get("message"), send_to: form.dataset.to }),
         });
         if (!res.ok) throw new Error(String(res.status));
-        form.reset(); if (amount) amount.hidden = true; status.textContent = "Thanks, we'll be in touch.";
+        form.reset(); status.textContent = "Thanks, we'll be in touch.";
       } catch {
         status.textContent = "Something went wrong. Please try again.";
       } finally {
