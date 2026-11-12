@@ -121,6 +121,53 @@ h1 .end .bar{width:.48em;height:.14em;vertical-align:.08em;margin-left:.08em;ani
 
 
 
+/* ───────── scroll reveal: one motion language for every page ─────────
+   site.js tags elements with data-rv and adds .in when they enter the viewport.
+   Elements that enter together get a staggered --d delay. Animations (not transitions) are used so
+   hover transitions on the same elements keep working, and "backwards" fill means nothing is held
+   once the entrance ends. Only active under .anim (JS on, motion allowed). */
+.anim [data-rv]:not(.in){opacity:0}
+.anim [data-rv].in{animation:rvUp .95s var(--e) var(--d,0ms) backwards}
+.anim [data-rv="scale"].in{animation-name:rvScale}
+.anim [data-rv="left"].in{animation-name:rvLeft}
+.anim [data-rv="right"].in{animation-name:rvRight}
+@keyframes rvUp{from{opacity:0;transform:translateY(28px)}}
+@keyframes rvScale{from{opacity:0;transform:translateY(36px) scale(.965)}}
+@keyframes rvLeft{from{opacity:0;transform:translateX(-48px)}}
+@keyframes rvRight{from{opacity:0;transform:translateX(48px)}}
+@media (max-width:960px){.anim [data-rv="left"].in,.anim [data-rv="right"].in{animation-name:rvUp}}
+/* section headers: number bar already draws in; the text block follows line by line */
+.anim .sh:not(.in) .sh-main>*{opacity:0}
+.anim .sh.in .sh-main>*{animation:rvUp .95s var(--e) backwards}
+.anim .sh.in .sh-main>:nth-child(2){animation-delay:.08s}
+.anim .sh.in .sh-main>:nth-child(3){animation-delay:.16s}
+/* rows inside a revealed mock window arrive one after another */
+.anim .rv-rows:not(.in) [data-row]{opacity:0}
+.anim .rv-rows.in [data-row]{animation:rvRow .6s var(--e) backwards;animation-delay:calc(.3s + var(--i,0) * 70ms)}
+@keyframes rvRow{from{opacity:0;transform:translateY(10px)}}
+/* the top section of every page is already on screen at load: no entrance there. Otherwise it
+   paints, gets hidden the moment JS adds .anim, then fades back — a visible flicker on navigation.
+   (The home hero has its own CSS-only load animation, which isn't affected.) */
+.anim main>section:first-child :is([data-rv],[data-row],.sh .sh-main>*){opacity:1!important;animation:none!important}
+.anim main>section:first-child .sh .sh-num::after{transform:none!important;transition:none!important}
+
+/* ───────── architecture: scroll timeline ─────────
+   A rail runs down the middle (left edge on small screens). Its fill scales with scroll
+   progress through the section (--p from site.js); each step's node lights up as its row
+   reaches the middle of the screen. */
+.arch{position:relative}
+.arch-rail{position:absolute;top:0;bottom:0;left:50%;width:2px;margin-left:-1px;background:var(--color-line);border-radius:2px;pointer-events:none}
+.arch-rail i{position:absolute;inset:0;border-radius:inherit;background:linear-gradient(var(--color-mint),var(--color-violet));transform-origin:50% 0;transform:scaleY(var(--p,1))}
+.anim .arch-rail i{transform:scaleY(var(--p,0))}
+.arch-node{position:absolute;left:50%;top:50%;z-index:1;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;display:grid;place-items:center;background:var(--color-bg);border:2px solid var(--color-line-2);font:500 11px/1 var(--font-mono);letter-spacing:.06em;color:var(--color-mute);transition:border-color .5s var(--e),color .5s var(--e),box-shadow .5s var(--e),transform .5s var(--e)}
+.arch-row.on .arch-node,:not(.anim) .arch-node{border-color:var(--color-mint-ink);color:var(--color-ink);box-shadow:0 0 0 7px color-mix(in srgb,var(--color-mint) 18%,transparent)}
+.anim .arch-row.on .arch-node{transform:scale(1.08)}
+@media (max-width:960px){
+  .arch-rail{left:17px}
+  .arch-row{padding-left:52px}
+  .arch-node{left:17px;top:clamp(32px,4.5vw,64px);margin-top:-6px;width:36px;height:36px;margin-left:-18px;font-size:10px}
+}
+
 /* ───────── floating waitlist pill (WaitlistFab.astro) ─────────
    A rotating conic gradient sits behind a 1.5px inset, so only a thin animated rim shows.
    @property lets the angle itself animate; browsers without it get a static gradient rim. */
