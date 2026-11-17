@@ -1,0 +1,126 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const colors = [
+  { name: "Mint", hex: "#4CF2C0" },
+  { name: "Violet", hex: "#8A7CFF" },
+  { name: "Ink", hex: "#0B1118" },
+];
+---
+<BaseLayout
+  title="N-Ops Press & Media Kit"
+  description="Boilerplate, brand assets, the product deck, roadmap, feature list and video for N-Ops, the open-source infrastructure control plane."
+  path="/press"
+>
+<section class="sec" aria-labelledby="pr-h">
+  <div class="wrap">
+    <header class="rgrid sh">
+      <div class="sh-num" aria-hidden="true">P</div>
+      <div class="sh-main">
+        <p class="eyebrow"><span class="bar"></span>Press</p>
+        <h1 id="pr-h" class="text-[clamp(2.6rem,6vw,5.4rem)] leading-[.95] tracking-[-.05em]">Press<span class="grad-t">room.</span></h1>
+        <p class="sub">Boilerplate, brand assets, and the product documents and video — everything you need to write about N-Ops.</p>
+      </div>
+    </header>
+
+    <div class="rgrid">
+      <div class="col-span-10 col-start-3 max-bp2:col-span-12 max-bp2:col-start-1 border-t-[1.5px] border-ink pt-8">
+        <h2 class="eyebrow max-w-none mb-4"><span class="bar"></span>About N-Ops</h2>
+        <p class="max-w-[70ch] text-ink-2 text-[17px]">
+          N-Ops is an open-source infrastructure control plane: servers, secrets, containers, approvals and workflows,
+          all in one place. It's self-hostable for free under GNU GPL v3.0, or available as a managed service. N-Ops is
+          built by <a href="https://nekonik.org/" rel="noopener" class="font-medium text-ink hover:text-mint-ink">Neko Nik</a>
+          and powered by <a href="https://www.yukthi.com/" rel="noopener" class="font-medium text-ink hover:text-mint-ink">YSPL</a>
+          (Yukthi Systems Private Limited). N-Ops is in active development.
+        </p>
+      </div>
+    </div>
+
+    <div class="rgrid mt-[clamp(48px,6vw,88px)]">
+      <div class="col-span-10 col-start-3 max-bp2:col-span-12 max-bp2:col-start-1">
+        <h2 class="eyebrow max-w-none mb-5"><span class="bar"></span>Documents and video</h2>
+        <div class="grid grid-cols-3 max-bp2:grid-cols-1 gap-[var(--gut)]">
+          <div class="rounded-[clamp(18px,2vw,24px)] border border-line-2 bg-surface p-[clamp(20px,2.5vw,32px)]">
+            <h3 class="text-[1.3rem] leading-[1.1] tracking-[-.03em]">Product &amp; pitch deck</h3>
+            <p class="mt-2 text-[15px] text-mute">Every module and feature, for press and partners. 38 pages.</p>
+            <div class="mt-6 flex flex-wrap gap-3">
+              <a href="/press/n-ops-pitch-deck.pdf" class="btn btn-line sm" target="_blank" rel="noopener">View deck</a>
+              <a href="/press/n-ops-pitch-deck.pdf" download class="btn btn-dark sm">
+                Download<svg aria-hidden="true"><use href="#i-arr"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="rounded-[clamp(18px,2vw,24px)] border border-line-2 bg-surface p-[clamp(20px,2.5vw,32px)]">
+            <h3 class="text-[1.3rem] leading-[1.1] tracking-[-.03em]">MVP roadmap</h3>
+            <p class="mt-2 text-[15px] text-mute">Releases, scope and estimates for the web MVP. 3 pages.</p>
+            <div class="mt-6 flex flex-wrap gap-3">
+              <a href="/press/n-ops-mvp-roadmap.pdf" class="btn btn-line sm" target="_blank" rel="noopener">View roadmap</a>
+              <a href="/press/n-ops-mvp-roadmap.pdf" download class="btn btn-dark sm">
+                Download<svg aria-hidden="true"><use href="#i-arr"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="rounded-[clamp(18px,2vw,24px)] border border-line-2 bg-surface p-[clamp(20px,2.5vw,32px)]">
+            <h3 class="text-[1.3rem] leading-[1.1] tracking-[-.03em]">Feature list for estimates</h3>
+            <p class="mt-2 text-[15px] text-mute">Every MVP feature, broken down per track. XLSX.</p>
+            <div class="mt-6 flex flex-wrap gap-3">
+              <a href="/press/n-ops-feature-list.xlsx" download class="btn btn-dark sm">
+                Download<svg aria-hidden="true"><use href="#i-arr"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="mt-[var(--gut)] rounded-[clamp(18px,2vw,24px)] border border-line-2 bg-surface p-[clamp(20px,2.5vw,32px)]">
+          <h3 class="text-[1.3rem] leading-[1.1] tracking-[-.03em]">Product video</h3>
+          <div class="mt-4 aspect-video overflow-hidden rounded-xl border border-line-2">
+            <iframe
+              class="w-full h-full"
+              src="https://www.youtube-nocookie.com/embed/9dB9l8-loRk"
+              title="N-Ops product video"
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rgrid mt-[clamp(48px,6vw,88px)]">
+      <div class="col-span-10 col-start-3 max-bp2:col-span-12 max-bp2:col-start-1">
+        <h2 class="eyebrow max-w-none mb-5"><span class="bar"></span>Brand assets</h2>
+        <div class="flex flex-wrap items-center gap-8 rounded-[clamp(18px,2vw,24px)] border border-line-2 bg-surface p-[clamp(20px,2.5vw,32px)]">
+          <img src="/press/n-ops-logo.svg" alt="N-Ops logo" width="64" height="64" class="flex-none rounded-xl border border-line-2" />
+          <div class="flex-1 min-w-[200px]">
+            <p class="text-[15px] text-ink-2">The N-Ops mark, as an SVG.</p>
+            <a href="/press/n-ops-logo.svg" download class="btn btn-line sm mt-3">
+              Download logo<svg aria-hidden="true"><use href="#i-arr"/></svg>
+            </a>
+          </div>
+          <ul class="flex flex-wrap gap-5 font-mono text-[13px]">
+            {colors.map((c) => (
+              <li class="flex items-center gap-2.5">
+                <span class="size-5 rounded-full border border-line-2" style={`background:${c.hex}`} aria-hidden="true"></span>
+                {c.name} <span class="text-mute">{c.hex}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <p class="mt-4 text-[13.5px] text-mute max-w-[70ch]">
+          Please don't modify the mark's shape or colors. Credit "N-Ops" when you use it.
+        </p>
+      </div>
+    </div>
+
+    <div class="rgrid mt-[clamp(48px,6vw,88px)]">
+      <div class="col-span-10 col-start-3 max-bp2:col-span-12 max-bp2:col-start-1 border-t border-line pt-8">
+        <h2 class="eyebrow max-w-none mb-4"><span class="bar"></span>Press inquiries</h2>
+        <p class="max-w-[60ch] text-ink-2 text-[17px]">
+          Questions for a story, or need something not listed here?
+          <a href="/contact" class="font-medium text-ink hover:text-mint-ink">Get in touch</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+</BaseLayout>
