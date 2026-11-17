@@ -71,16 +71,28 @@ const colors = [
           </div>
         </div>
         <div class="mt-[var(--gut)] rounded-[clamp(18px,2vw,24px)] border border-line-2 bg-surface p-[clamp(20px,2.5vw,32px)]">
-          <h3 class="text-[1.3rem] leading-[1.1] tracking-[-.03em]">Product video</h3>
-          <div class="mt-4 aspect-video overflow-hidden rounded-xl border border-line-2">
-            <iframe
-              class="w-full h-full"
-              src="https://www.youtube-nocookie.com/embed/9dB9l8-loRk"
-              title="N-Ops product video"
-              loading="lazy"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-            ></iframe>
+          <h3 class="text-[1.3rem] leading-[1.1] tracking-[-.03em]">Product videos</h3>
+          <div class="mt-4 grid grid-cols-2 max-bp3:grid-cols-1 gap-[var(--gut)]">
+            <div class="aspect-video overflow-hidden rounded-xl border border-line-2">
+              <iframe
+                class="w-full h-full"
+                src="https://www.youtube-nocookie.com/embed/ljCA4-unSYY"
+                title="N-Ops product video 1"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            </div>
+            <div class="aspect-video overflow-hidden rounded-xl border border-line-2">
+              <iframe
+                class="w-full h-full"
+                src="https://www.youtube-nocookie.com/embed/9dB9l8-loRk"
+                title="N-Ops product video 2"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            </div>
           </div>
         </div>
       </div>
