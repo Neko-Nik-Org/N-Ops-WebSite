@@ -15,36 +15,35 @@ const ul = "mt-4 grid gap-2 list-disc pl-5 text-ink-2 text-[16px] leading-[1.7]"
 
     <h2 class={h}>1. Data we collect</h2>
     <p class={p}><b>Website forms</b> (contact, feedback, security report): name, email, your message and any topic you choose. The <b>waitlist</b> form also asks for details such as your company, role, server count, tools, wanted features and pricing preference. We use this only to reply to you and act on your request.</p>
-    <p class={p}><b>Account data</b> (platform users): username, display name, email, a hashed password (never stored in plain text), two-factor (TOTP) settings, anti-phishing code, role and permission assignments, UI preferences and sign-in timestamps.</p>
-    <p class={p}><b>Organization data</b> your team stores: servers, tags, access policies, API keys (stored only as hashes), vault projects, secrets and secure notes, approvals and audit records. Secrets and notes are encrypted with AES-256-GCM using a per-organization key.</p>
-    <p class={p}><b>Device and session data</b>: device name, type, identifier and details, push notification tokens (FCM/APNs) if you enable notifications, IP address and the country derived from it, and session identifiers.</p>
+    <p class={p}><b>Account data</b> (platform users): username, display name, email, a bcrypt-hashed password (never stored in plain text), an anti-phishing secret (encrypted), two-factor settings (TOTP or email), role and permission assignments, any IP or country restrictions you set, UI preferences and last sign-in time.</p>
+    <p class={p}><b>Organization data</b> your team stores: servers, tags, access policies, API keys (stored only as HMAC-SHA-256 hashes), vault projects, secrets and secure notes, approval requests, audit logs of actions in your organization, and pending invitations (invitee email, an HMAC-SHA-256 hash of the invite code, and any note the inviter adds). Secrets and notes are encrypted with AES-256-GCM using envelope encryption: data is encrypted with a data-encryption key, which is itself encrypted with another key.</p>
+    <p class={p}><b>Device and session data</b>: for app (device) sign-ins, the device name, type, identifier and details, a hashed session token, and push notification tokens (FCM/APNs) if you provide them; for all sign-ins, a session identifier, plus your IP address and the country derived from it, used to enforce access-restriction rules.</p>
 
     <h2 class={h}>2. How we use it</h2>
     <ul class={ul}>
-      <li>To provide, secure and operate the service, including authentication, access-restriction policies (IP and country rules) and audit trails.</li>
-      <li>To send transactional email (verification, invitations, security alerts) and push notifications you enable.</li>
+      <li>To provide, secure and operate the service, including authentication and access-restriction policies (IP and country rules).</li>
+      <li>To send transactional email (verification, invitations, two-factor codes) that includes your anti-phishing secret, and push notifications you enable.</li>
       <li>To respond to contact, feedback, waitlist and security messages.</li>
       <li>To detect abuse and protect the platform.</li>
     </ul>
     <p class={p}>We do not sell personal data and do not use it for advertising.</p>
 
     <h2 class={h}>3. Cookies and local storage</h2>
-    <p class={p}>The admin panel sets first-party cookies (<code>nops_session</code>, <code>nops_session_at</code>, and <code>nops_remember</code> if you tick "Keep me signed in"). They are Secure, SameSite=Strict, and last for the browser session, or 7 days if you chose to stay signed in. They keep you signed in and are strictly necessary. The website stores your light/dark theme choice in your browser's local storage. We do not use advertising or analytics cookies.</p>
+    <p class={p}>This website sets no cookies. It stores only your light/dark theme choice and whether you dismissed the waitlist prompt in your browser's local storage; neither is sent to us. Fonts are served from our own domain, with no calls to Google. We do not use advertising or analytics tracking. When you sign in to the N-Ops admin panel, your session token is kept in your browser only while you are signed in, and is removed when you sign out.</p>
 
     <h2 class={h}>4. Service providers</h2>
     <p class={p}>We rely on a few providers to run the service, and they may process data on our behalf:</p>
     <ul class={ul}>
       <li><b>Cloudflare</b>: hosting of the website and Turnstile bot protection on forms and sign-in (Turnstile receives your IP address and browser signals).</li>
-      <li><b>Google Fonts</b>: the site loads fonts from Google, which receives your IP address.</li>
       <li><b>Email delivery (SMTP)</b> and <b>push services</b> (Google FCM, Apple APNs): used only to deliver messages you should receive.</li>
     </ul>
     <p class={p}>We may also disclose data when required by law or to protect rights and security.</p>
 
     <h2 class={h}>5. Retention</h2>
-    <p class={p}>Account and organization data is kept while the account is active. Sessions expire automatically (about 3 hours, extendable only for "Keep me signed in" sessions), device sessions inactive for 7 days are removed, expired API keys and invitations are cleaned up, and form messages are kept only as long as needed to handle your request. You can ask us to delete your data at any time.</p>
+    <p class={p}>Account and organization data is kept while the account is active. Sessions expire automatically after 3 hours (renewable only for "Extend your Login Session" sessions), expired API keys and invitations are deleted automatically (checked every 3 and 2 hours), invitations expire within 21 days, audit logs are kept for 90 days and then deleted, device sessions are removed when you or an admin revoke them, and form messages are kept only as long as needed to handle your request. You can ask us to delete your data at any time.</p>
 
     <h2 class={h}>6. Security</h2>
-    <p class={p}>Passwords are hashed, secrets are encrypted at rest, API keys are stored as hashes, sessions use strict cookies, and sign-in supports two-factor authentication. No system is perfectly secure; to report a problem see our <a class="underline hover:text-mint-ink" href="/security">vulnerability reporting page</a>.</p>
+    <p class={p}>Passwords are bcrypt-hashed, secrets are encrypted at rest with AES-256-GCM using envelope encryption (each data-encryption key is itself encrypted with another key), API keys, invitation codes and device tokens are stored as HMAC-SHA-256 hashes, the session cookie is Secure and SameSite=Strict, and sign-in supports two-factor authentication (TOTP or email). No system is perfectly secure; to report a problem see our <a class="underline hover:text-mint-ink" href="/security">vulnerability reporting page</a>.</p>
 
     <h2 class={h}>7. Your rights</h2>
     <p class={p}>Depending on where you live (for example under GDPR or India's DPDP Act), you may request access, correction, deletion or export of your data, object to or restrict processing, and withdraw consent. Organization members can often manage their data in the admin panel; otherwise contact us below.</p>

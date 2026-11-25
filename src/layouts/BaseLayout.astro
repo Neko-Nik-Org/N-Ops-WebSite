@@ -4,6 +4,8 @@ import IconSprite from "../components/IconSprite.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import WaitlistFab from "../components/WaitlistFab.astro";
+import "@fontsource-variable/space-grotesk";
+import "@fontsource-variable/jetbrains-mono";
 import "../styles/global.css";
 
 interface Props {
@@ -51,12 +53,6 @@ const ld = {
       if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
     })();
   </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@300..700&display=swap"
-    rel="stylesheet"
-  />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="generator" content={Astro.generator} />
   <script type="application/ld+json" set:html={JSON.stringify(ld)} />

@@ -10,7 +10,7 @@
   --color-mint-ink:#0A9A74;--color-violet-ink:#6A59F2;
   --color-t-bg:#0B1118;--color-t-panel:#101822;--color-t-panel-2:#151E2A;--color-t-line:rgba(232,238,244,.1);--color-t-ink:#E8EEF4;--color-t-mute:#8D99A8;
   --color-red:#FF6B6B;--color-amber:#F5B94A;
-  --font-sans:"Space Grotesk",ui-sans-serif,system-ui,sans-serif;--font-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --font-sans:"Space Grotesk Variable",ui-sans-serif,system-ui,sans-serif;--font-mono:"JetBrains Mono Variable",ui-monospace,Consolas,monospace;
   --breakpoint-bp1:1180px;--breakpoint-bp2:960px;--breakpoint-bp3:760px;--breakpoint-bp4:420px;
   --ease-std:cubic-bezier(.22,1,.36,1);--ease-std2:cubic-bezier(.65,0,.35,1);
 }
