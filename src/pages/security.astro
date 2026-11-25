@@ -1,0 +1,31 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ApiForm from "../components/ApiForm.astro";
+const topics = ["Website", "Web admin panel", "API", "Mobile app", "Something else"];
+---
+<BaseLayout title="Report a Security Issue — N-Ops" description="Report a security vulnerability in N-Ops responsibly. Our disclosure policy, scope and what to expect." path="/security">
+<section class="pt-[clamp(28px,4.5vw,64px)] pb-[clamp(64px,8vw,128px)]" aria-labelledby="sc-h">
+  <div class="wrap grid grid-cols-12 gap-x-[var(--gut)] gap-y-10 items-start">
+    <div class="col-span-4 max-bp2:col-span-12 bp2:sticky bp2:top-[calc(var(--nav)+24px)]">
+      <p class="eyebrow"><span class="bar"></span>Security</p>
+      <h1 id="sc-h" class="mt-5 text-[clamp(2.4rem,4.4vw,3.9rem)] leading-[.95] tracking-[-.05em]">Report a <span class="grad-t">vulnerability.</span></h1>
+      <p class="mt-4 max-w-[38ch] text-ink-2 text-[clamp(16px,1.25vw,18px)]">N-Ops manages servers and secrets, so we take reports seriously. Tell us what you found and how to reproduce it.</p>
+      <ul class="mt-7 grid gap-3 max-w-[42ch] list-disc pl-5 text-[15px] text-ink-2">
+        <li>Include the affected URL or component, the steps to reproduce and the impact.</li>
+        <li>Do not access, change or keep data that is not yours, and do not run denial-of-service or social-engineering attacks.</li>
+        <li>Give us reasonable time to fix the issue before disclosing it publicly.</li>
+        <li>We will acknowledge your report, keep you updated and credit you if you wish. Good-faith research under these rules will not be pursued.</li>
+        <li>Never include real secrets or credentials. You can also open a private advisory on <a class="underline hover:text-mint-ink" href="https://github.com/Neko-Nik-Org/N-Ops-Main-API/security" rel="noopener">GitHub</a>.</li>
+      </ul>
+      <p class="mt-6 text-[14px] text-mute">Machine-readable: <a class="underline hover:text-mint-ink" href="/.well-known/security.txt">/.well-known/security.txt</a></p>
+    </div>
+    <div class="col-span-8 bp2:col-start-5 max-bp2:col-span-12">
+      <div class="rounded-[clamp(20px,2vw,26px)] border border-line-2 bg-surface shadow-[0_30px_70px_-50px_rgba(11,17,24,.5)] p-[clamp(20px,3vw,40px)]">
+        <h2 class="max-w-none text-[clamp(1.45rem,2.2vw,1.9rem)] leading-[1.1] tracking-[-.035em]">Submit a security report</h2>
+        <p class="mt-2 mb-8 text-[15px] text-mute">Share your email so we can follow up with you.</p>
+        <ApiForm kind="security" button="Submit report" prefix="Security Report" topics={topics} topicLabel="Which part is affected?" placeholder="Describe the issue, how to reproduce it and its impact." />
+      </div>
+    </div>
+  </div>
+</section>
+</BaseLayout>

@@ -1,0 +1,24 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ApiForm from "../components/ApiForm.astro";
+const topics = ["Website", "Web admin panel", "Mobile app", "Something else"];
+---
+<BaseLayout title="Feedback — N-Ops" description="Share feedback on the N-Ops website, web admin panel or app. Tell us what works and what does not." path="/feedback">
+<section class="pt-[clamp(28px,4.5vw,64px)] pb-[clamp(64px,8vw,128px)]" aria-labelledby="fb-h">
+  <div class="wrap grid grid-cols-12 gap-x-[var(--gut)] gap-y-10 items-start">
+    <div class="col-span-4 max-bp2:col-span-12 bp2:sticky bp2:top-[calc(var(--nav)+24px)]">
+      <p class="eyebrow"><span class="bar"></span>Feedback</p>
+      <h1 id="fb-h" class="mt-5 text-[clamp(2.4rem,4.4vw,3.9rem)] leading-[.95] tracking-[-.05em]">Tell us what to <span class="grad-t">improve.</span></h1>
+      <p class="mt-4 max-w-[38ch] text-ink-2 text-[clamp(16px,1.25vw,18px)]">Feedback on the website, the web admin panel or the app all lands here. Pick where you saw it and tell us what happened or what you would like.</p>
+      <p class="mt-6 max-w-[38ch] text-[15px] text-mute">Found a security problem? Please use the <a class="underline hover:text-mint-ink" href="/security">vulnerability report</a> page instead.</p>
+    </div>
+    <div class="col-span-8 bp2:col-start-5 max-bp2:col-span-12">
+      <div class="rounded-[clamp(20px,2vw,26px)] border border-line-2 bg-surface shadow-[0_30px_70px_-50px_rgba(11,17,24,.5)] p-[clamp(20px,3vw,40px)]">
+        <h2 class="max-w-none text-[clamp(1.45rem,2.2vw,1.9rem)] leading-[1.1] tracking-[-.035em]">Send feedback</h2>
+        <p class="mt-2 mb-8 text-[15px] text-mute">Web or app, big or small, we read all of it.</p>
+        <ApiForm kind="feedback" button="Send feedback" prefix="Feedback" topics={topics} topicLabel="Where did you use N-Ops?" placeholder="What worked, what did not, or what would you like to see?" />
+      </div>
+    </div>
+  </div>
+</section>
+</BaseLayout>

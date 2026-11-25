@@ -1,0 +1,62 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+const updated = "25 November 2026";
+const h = "mt-12 text-[clamp(1.4rem,2.2vw,1.8rem)] font-semibold tracking-[-.03em]";
+const p = "mt-4 text-ink-2 text-[16px] leading-[1.7]";
+const ul = "mt-4 grid gap-2 list-disc pl-5 text-ink-2 text-[16px] leading-[1.7]";
+---
+<BaseLayout title="Privacy Policy — N-Ops" description="How N-Ops collects, uses, stores and protects personal data on the website and in the N-Ops platform." path="/privacy">
+<section class="pt-[clamp(28px,4.5vw,64px)] pb-[clamp(64px,8vw,128px)]" aria-labelledby="pv-h">
+  <div class="wrap max-w-[820px]">
+    <p class="eyebrow"><span class="bar"></span>Legal</p>
+    <h1 id="pv-h" class="mt-5 text-[clamp(2.4rem,5vw,4.4rem)] leading-[.98] tracking-[-.05em]">Privacy <span class="grad-t">Policy</span></h1>
+    <p class="mt-5 font-mono text-xs text-mute">Last updated: {updated}</p>
+    <p class={p}>This policy explains what personal data N-Ops (by Neko Nik, powered by YSPL, Yukthi Systems Private Limited — "we", "us") handles on the nops.app website and in the N-Ops platform (API, admin panel and apps), and the choices you have. N-Ops is open source under GPL-3.0; if you self-host it, your own deployment is controlled by you and this policy covers only what we operate.</p>
+
+    <h2 class={h}>1. Data we collect</h2>
+    <p class={p}><b>Website forms</b> (contact, feedback, security report): name, email, your message and any topic you choose. The <b>waitlist</b> form also asks for details such as your company, role, server count, tools, wanted features and pricing preference. We use this only to reply to you and act on your request.</p>
+    <p class={p}><b>Account data</b> (platform users): username, display name, email, a hashed password (never stored in plain text), two-factor (TOTP) settings, anti-phishing code, role and permission assignments, UI preferences and sign-in timestamps.</p>
+    <p class={p}><b>Organization data</b> your team stores: servers, tags, access policies, API keys (stored only as hashes), vault projects, secrets and secure notes, approvals and audit records. Secrets and notes are encrypted with AES-256-GCM using a per-organization key.</p>
+    <p class={p}><b>Device and session data</b>: device name, type, identifier and details, push notification tokens (FCM/APNs) if you enable notifications, IP address and the country derived from it, and session identifiers.</p>
+
+    <h2 class={h}>2. How we use it</h2>
+    <ul class={ul}>
+      <li>To provide, secure and operate the service, including authentication, access-restriction policies (IP and country rules) and audit trails.</li>
+      <li>To send transactional email (verification, invitations, security alerts) and push notifications you enable.</li>
+      <li>To respond to contact, feedback, waitlist and security messages.</li>
+      <li>To detect abuse and protect the platform.</li>
+    </ul>
+    <p class={p}>We do not sell personal data and do not use it for advertising.</p>
+
+    <h2 class={h}>3. Cookies and local storage</h2>
+    <p class={p}>The admin panel sets first-party cookies (<code>nops_session</code>, <code>nops_session_at</code>, and <code>nops_remember</code> if you tick "Keep me signed in"). They are Secure, SameSite=Strict, and last for the browser session, or 7 days if you chose to stay signed in. They keep you signed in and are strictly necessary. The website stores your light/dark theme choice in your browser's local storage. We do not use advertising or analytics cookies.</p>
+
+    <h2 class={h}>4. Service providers</h2>
+    <p class={p}>We rely on a few providers to run the service, and they may process data on our behalf:</p>
+    <ul class={ul}>
+      <li><b>Cloudflare</b>: hosting of the website and Turnstile bot protection on forms and sign-in (Turnstile receives your IP address and browser signals).</li>
+      <li><b>Google Fonts</b>: the site loads fonts from Google, which receives your IP address.</li>
+      <li><b>Email delivery (SMTP)</b> and <b>push services</b> (Google FCM, Apple APNs): used only to deliver messages you should receive.</li>
+    </ul>
+    <p class={p}>We may also disclose data when required by law or to protect rights and security.</p>
+
+    <h2 class={h}>5. Retention</h2>
+    <p class={p}>Account and organization data is kept while the account is active. Sessions expire automatically (about 3 hours, extendable only for "Keep me signed in" sessions), device sessions inactive for 7 days are removed, expired API keys and invitations are cleaned up, and form messages are kept only as long as needed to handle your request. You can ask us to delete your data at any time.</p>
+
+    <h2 class={h}>6. Security</h2>
+    <p class={p}>Passwords are hashed, secrets are encrypted at rest, API keys are stored as hashes, sessions use strict cookies, and sign-in supports two-factor authentication. No system is perfectly secure; to report a problem see our <a class="underline hover:text-mint-ink" href="/security">vulnerability reporting page</a>.</p>
+
+    <h2 class={h}>7. Your rights</h2>
+    <p class={p}>Depending on where you live (for example under GDPR or India's DPDP Act), you may request access, correction, deletion or export of your data, object to or restrict processing, and withdraw consent. Organization members can often manage their data in the admin panel; otherwise contact us below.</p>
+
+    <h2 class={h}>8. Children</h2>
+    <p class={p}>N-Ops is a professional tool and is not directed to children under 16. We do not knowingly collect their data.</p>
+
+    <h2 class={h}>9. International transfers and changes</h2>
+    <p class={p}>Our providers may process data in other countries; we rely on their contractual safeguards. We will update this page and its date when this policy changes.</p>
+
+    <h2 class={h}>10. Contact</h2>
+    <p class={p}>Privacy questions or requests: <a class="underline hover:text-mint-ink" href="/contact">contact form</a>. General feedback: <a class="underline hover:text-mint-ink" href="/feedback">feedback</a>. Security issues: <a class="underline hover:text-mint-ink" href="/security">report a vulnerability</a>.</p>
+  </div>
+</section>
+</BaseLayout>
